@@ -3,25 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#faf9f7">
-  <title>Cynex — Roblox Programmer &amp; Systems Developer</title>
-  <meta name="description" content="Nathaniel Madrid (Cynex) is a Roblox programmer and systems developer building gameplay, backend, persistent data, interface, and moderation systems in Luau.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#faf9f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
+  <title>Cynex Services | Roblox Programmer &amp; Systems Developer</title>
+  <meta name="description" content="Cynex Services is Nathaniel Madrid, a Roblox programmer and systems developer building gameplay, backend, persistent data, interface, and moderation systems in Luau.">
   <link rel="canonical" href="https://nathmadgam.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://nathmadgam.github.io/">
-  <meta property="og:site_name" content="Cynex">
-  <meta property="og:title" content="Cynex — Roblox Programmer &amp; Systems Developer">
+  <meta property="og:site_name" content="Cynex Services">
+  <meta property="og:title" content="Cynex Services | Roblox Programmer &amp; Systems Developer">
   <meta property="og:description" content="Selected Roblox systems, published experiences, technical capabilities, and client feedback.">
-  <meta property="og:image" content="https://nathmadgam.github.io/images/avatar.webp">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://nathmadgam.github.io/images/cynex-services.png">
+  <meta property="og:image:width" content="500">
+  <meta property="og:image:height" content="500">
+  <meta property="og:image:alt" content="Cynex Services logo">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@cynexcodes">
-  <meta name="twitter:title" content="Cynex — Roblox Programmer &amp; Systems Developer">
+  <meta name="twitter:title" content="Cynex Services | Roblox Programmer &amp; Systems Developer">
   <meta name="twitter:description" content="Selected Roblox systems, published experiences, technical capabilities, and client feedback.">
-  <meta name="twitter:image" content="https://nathmadgam.github.io/images/avatar.webp">
+  <meta name="twitter:image" content="https://nathmadgam.github.io/images/cynex-services.png">
 
-  <script>document.documentElement.classList.add("js");</script>
-  <link rel="icon" href="assets/fallbacks/cynex-mark.svg" type="image/svg+xml">
+  <script>
+    // Runs before first paint so a saved theme never flashes the other palette.
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js");
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") root.dataset.theme = saved;
+      } catch (error) { /* storage blocked; fall back to the system preference */ }
+    })();
+  </script>
+  <link rel="icon" href="images/cynex-services.ico" sizes="any">
+  <link rel="apple-touch-icon" href="images/cynex-services.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
@@ -71,6 +86,12 @@
       <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 6 9 17l-5-5"/>
       </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+      </symbol>
       <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5 19.5 12 7 19.5Z"/></symbol>
       <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
       <!-- Brand icons: Simple Icons (CC0). https://simpleicons.org -->
@@ -83,7 +104,10 @@
 
   <header class="site-header" data-header>
     <div class="site-header-inner shell">
-      <a class="brand" href="#top">Cynex<span class="brand-dot" aria-hidden="true">.</span></a>
+      <a class="brand" href="#top">
+        <img class="brand-mark" src="images/cynex-services.png" alt="" width="500" height="500" decoding="async">
+        <span>Cynex Services</span>
+      </a>
 
       <nav class="primary-nav" aria-label="Primary">
         <ul>
@@ -96,6 +120,11 @@
       </nav>
 
       <a class="header-cta" href="#contact">Start a project</a>
+
+      <button class="theme-toggle" type="button" aria-label="Switch colour theme" data-theme-toggle>
+        <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+        <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+      </button>
 
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu" data-menu-toggle>
         <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
@@ -122,7 +151,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Roblox · Luau · Systems development</p>
           <h1>Roblox gameplay and backend systems, built to be maintained.</h1>
-          <p class="lede">I develop gameplay, backend services, persistent data, interfaces, and moderation tooling in Luau — structured so a team can extend the work after launch.</p>
+          <p class="lede">I develop gameplay, backend services, persistent data, interfaces, and moderation tooling in Luau, structured so a team can extend the work after launch.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#work">View selected work<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
             <a class="btn btn-secondary" href="#contact">Get in touch</a>
@@ -136,7 +165,7 @@
 
         <figure class="hero-portrait">
           <img src="images/avatar.webp" alt="Portrait of Nathaniel Madrid" width="1100" height="1100" fetchpriority="high" decoding="async">
-          <figcaption>Nathaniel Madrid — programmer, working as Cynex</figcaption>
+          <figcaption>Nathaniel Madrid, programmer, trading as Cynex Services</figcaption>
         </figure>
       </div>
     </section>
@@ -306,7 +335,7 @@
             </div>
             <div class="field">
               <label for="f-timeline">Target timeline <span class="optional">(optional)</span></label>
-              <input id="f-timeline" type="text" name="timeline" placeholder="e.g. 2–4 weeks">
+              <input id="f-timeline" type="text" name="timeline" placeholder="e.g. 2-4 weeks">
             </div>
             <div class="field field-wide">
               <label for="f-brief">Project brief</label>
@@ -355,7 +384,7 @@
             </ul>
             <p class="channels-note">
               <svg class="icon" aria-hidden="true"><use href="#i-map-pin"></use></svg>
-              Philippines · UTC+8 — remote collaboration
+              Philippines · UTC+8 · Remote collaboration
             </p>
           </div>
         </div>
@@ -365,7 +394,10 @@
 
   <footer class="site-footer">
     <div class="shell site-footer-inner">
-      <p class="footer-brand"><strong>Cynex</strong><span>Roblox programmer and systems developer</span></p>
+      <div class="footer-brand">
+        <img class="brand-mark" src="images/cynex-services.png" alt="" width="500" height="500" loading="lazy" decoding="async">
+        <p><strong>Cynex Services</strong><span>Roblox programmer and systems developer</span></p>
+      </div>
       <ul class="footer-links">
         <li><a href="mailto:nathanielmadridgaminde@proton.me" aria-label="Email">
           <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg></a></li>

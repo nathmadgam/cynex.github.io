@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
-  <title id="title">Cynex Services CS mark</title>
-  <rect width="128" height="128" rx="12" fill="#080808"/>
-  <path d="M65 26H43C29 26 20 37 20 51v26c0 14 9 25 23 25h22V82H46c-5 0-8-4-8-9V55c0-5 3-9 8-9h19V26Z" fill="#ff2638"/>
-  <path d="M70 26h38v20H84v8h13c10 0 16 7 16 17v10c0 13-8 21-21 21H70V82h22c3 0 5-2 5-5v-4H84c-9 0-14-7-14-17V26Z" fill="#f4f1eb"/>
-</svg>

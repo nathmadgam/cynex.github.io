@@ -1,6 +1,6 @@
-# Cynex — Roblox programmer portfolio
+# Cynex Services, Roblox programmer portfolio
 
-Personal portfolio for Nathaniel Madrid (Cynex), published at
+Portfolio site for Cynex Services (Nathaniel Madrid), published at
 <https://nathmadgam.github.io/>.
 
 Plain HTML, CSS, and ES modules. No framework, no build step, no dependencies.
@@ -16,10 +16,22 @@ assets/posters/       video poster frames (960×540)
 assets/cached-media/  Roblox and Discord avatars
 assets/contract-pages/ contract page previews
 assets/fallbacks/     SVG placeholders used if a bitmap fails to load
-images/               portrait
+images/               portrait, plus the Cynex Services logo (.png) and favicon (.ico)
 videos/               project demo recordings
 downloads/            the client agreement PDF
 ```
+
+## Theming
+
+Light and dark palettes are both defined as CSS custom properties at the top of
+`styles.css`. Dark is applied either from `prefers-color-scheme` or from an
+explicit `data-theme="dark"` on the root element, set by the header toggle and
+stored in `localStorage`. A small inline script in `index.html` applies the saved
+theme before first paint so the other palette never flashes.
+
+Only the colour tokens change between themes. Nothing else in the stylesheet is
+theme-aware, so a new component picks up dark mode automatically as long as it
+uses the tokens.
 
 ## Editing content
 

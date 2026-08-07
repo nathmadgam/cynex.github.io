@@ -1,5 +1,5 @@
 /**
- * Cynex portfolio — site behaviour.
+ * Cynex Services portfolio site behaviour.
  * Renders list content from data.js and wires up navigation, the demo player,
  * the contract viewer, and the inquiry form. No external dependencies.
  */
@@ -162,6 +162,43 @@ function setupHeader() {
   const sentinel = () => header.classList.toggle("is-stuck", window.scrollY > 8);
   sentinel();
   addEventListener("scroll", sentinel, { passive: true });
+}
+
+/**
+ * Theme toggle. The palette itself is switched by CSS via [data-theme] on the
+ * root element; this only records the choice and keeps the label accurate.
+ */
+function setupThemeToggle() {
+  const toggle = qs("[data-theme-toggle]");
+  if (!toggle) return;
+  const root = document.documentElement;
+  const systemDark = matchMedia("(prefers-color-scheme: dark)");
+
+  const activeTheme = () =>
+    root.dataset.theme || (systemDark.matches ? "dark" : "light");
+
+  const syncLabel = () => {
+    toggle.setAttribute(
+      "aria-label",
+      activeTheme() === "dark" ? "Switch to the light theme" : "Switch to the dark theme",
+    );
+  };
+
+  toggle.addEventListener("click", () => {
+    const next = activeTheme() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch (error) { /* storage blocked; the choice lasts for this page only */ }
+    syncLabel();
+  });
+
+  // Keep following the OS until the visitor picks a theme explicitly.
+  systemDark.addEventListener("change", () => {
+    if (!root.dataset.theme) syncLabel();
+  });
+
+  syncLabel();
 }
 
 function setupMobileNav() {
@@ -341,7 +378,7 @@ function setupInquiryForm() {
 
     const data = new FormData(form);
     const get = key => String(data.get(key) ?? "").trim();
-    const subject = `Roblox project inquiry — ${get("projectType")}`;
+    const subject = `Roblox project inquiry: ${get("projectType")}`;
     const body = [
       `Name: ${get("name")}`,
       `Email: ${get("email")}`,
@@ -352,7 +389,7 @@ function setupInquiryForm() {
       get("brief"),
     ].join("\n");
 
-    announce("Email prepared — your mail app should open shortly.", "ok");
+    announce("Email prepared. Your mail app should open shortly.", "ok");
     location.href =
       `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
@@ -368,6 +405,7 @@ renderNetwork();
 renderReviews();
 
 setupHeader();
+setupThemeToggle();
 setupMobileNav();
 setupScrollSpy();
 setupPlayer();
