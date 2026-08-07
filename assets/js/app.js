@@ -1,973 +1,370 @@
-import { projects, games, skills, process, robloxGroups, discordServers, reviews } from "./data.js";
-import { getRobloxGameImages, getRobloxGameDetails, getRobloxGroupImages, getDiscordServer, loadImageSafely } from "./media-service.js";
+/**
+ * Cynex portfolio — site behaviour.
+ * Renders list content from data.js and wires up navigation, the demo player,
+ * the contract viewer, and the inquiry form. No external dependencies.
+ */
+import {
+  projects,
+  games,
+  capabilities,
+  process,
+  robloxGroups,
+  discordServers,
+  reviews,
+} from "./data.js";
+
+const CONTACT_EMAIL = "nathanielmadridgaminde@proton.me";
 
 const qs = (selector, root = document) => root.querySelector(selector);
 const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
-const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const prefersReducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" })[character]);
+const escapeHtml = value =>
+  String(value).replace(/[&<>"']/g, character =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+
+const icon = (name, className = "icon") =>
+  `<svg class="${className}" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
+
+/** Swap to the local SVG fallback when a cached bitmap is missing. */
+function attachImageFallbacks(root) {
+  qsa("img[data-fallback]", root).forEach(image => {
+    image.addEventListener("error", () => {
+      const fallback = image.dataset.fallback;
+      if (!fallback || image.src.endsWith(fallback)) return;
+      image.src = fallback;
+    }, { once: true });
+  });
 }
 
-function icon(name, className = "ui-icon") {
-  const paths = {
-    play: '<path d="m9 7 8 5-8 5Z"/>',
-    volume: '<path d="M5 10h3l4-3v10l-4-3H5Z"/><path d="M15 9.5c1.4 1.4 1.4 3.6 0 5M17.5 7c2.8 2.8 2.8 7.2 0 10"/>',
-    external: '<path d="M7 17 17 7M8 7h9v9"/>',
-    roblox: '<path d="m8 4 12 4-4 12-12-4Z"/><path d="m10.5 9.5 4 1.3-1.3 4-4-1.3Z"/>',
-    discord: '<path d="M7.4 6.2A16 16 0 0 1 12 5.5a16 16 0 0 1 4.6.7c1.6 2.2 2.2 4.5 2 6.8-1.4 1-2.8 1.6-4.2 1.9l-1-1.3c.7-.2 1.3-.5 1.9-.9-1.8.8-4.8.8-6.6 0 .6.4 1.2.7 1.9.9l-1 1.3A11.5 11.5 0 0 1 5.4 13c-.2-2.3.4-4.6 2-6.8Z"/><path d="M9 11.7h.01M15 11.7h.01"/>',
-    code: '<path d="m9 7-5 5 5 5M15 7l5 5-5 5M13.5 5 10.5 19"/>',
-    clipboardList: '<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
-    code2: '<path d="m18 16 4-4-4-4M6 8l-4 4 4 4M14.5 4l-5 16"/>',
-    bug: '<path d="m8 2 1.88 1.88M14.12 3.88 16 2M9 7.13V6a3 3 0 1 1 6 0v1.13M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6M12 20v-9M6.5 9C4.6 8.8 3 7.1 3 5M6 13H2M3 21c0-2.1 1.7-3.9 3.8-4M17.5 9C19.4 8.8 21 7.1 21 5M18 13h4M21 21c0-2.1-1.7-3.9-3.8-4"/>',
-    packageCheck: '<path d="M16 16l2 2 4-4M21 10.5V6a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 6v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14M7.5 4.27l9 5.15M3.29 5 12 10l8.71-5M12 22V10"/>',
-    download: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/>',
-  };
-  return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true">${paths[name] ?? paths.code}</svg>`;
-}
+/* ------------------------------------------------------------------ render */
 
 function renderProjects() {
-  const grid = qs("[data-project-grid]");
-  if (!projects.length) {
-    grid.innerHTML = '<p class="network-empty">No project demos are published yet.</p>';
-    return;
-  }
-  grid.innerHTML = projects.map((project, index) => `
-    <article class="project-card reveal" data-tilt style="--reveal-delay:${Math.min(index * 60, 240)}ms">
-      <div class="project-media">
-        <span class="project-number">${String(index + 1).padStart(2, "0")}</span>
-        <img src="${escapeHtml(project.poster)}" alt="Video preview for ${escapeHtml(project.title)}" width="960" height="540" loading="lazy" decoding="async">
-        <div class="project-media-glow" aria-hidden="true"></div>
-        <button class="project-play" type="button" data-video="${escapeHtml(project.video)}" data-poster="${escapeHtml(project.poster)}" data-title="${escapeHtml(project.title)}" aria-label="Play ${escapeHtml(project.title)} demo with audio">
-          <span class="project-play-symbol">${icon("play")}</span><span>Play demo</span><span class="project-audio">${icon("volume")} audio</span>
-        </button>
-      </div>
+  const list = qs("[data-project-list]");
+  if (!list) return;
+  list.innerHTML = projects.map(project => `
+    <article class="project reveal">
+      <button class="project-media" type="button"
+              data-video="${escapeHtml(project.video)}"
+              data-title="${escapeHtml(project.title)}"
+              aria-label="Play the ${escapeHtml(project.title)} demo">
+        <img src="${escapeHtml(project.poster)}" alt="Still frame from the ${escapeHtml(project.title)} demo"
+             width="960" height="540" loading="lazy" decoding="async">
+        <span class="play-badge" aria-hidden="true">${icon("play")}</span>
+      </button>
       <div class="project-body">
-        <div class="project-meta"><span>${escapeHtml(project.category)}</span><span>${escapeHtml(project.year)}</span></div>
-        <h3>${escapeHtml(project.title)}</h3>
-        <p>${escapeHtml(project.description)}</p>
-        <div class="tag-list">${project.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
+        <h3 class="project-title">${escapeHtml(project.title)}</h3>
+        <p class="project-meta">
+          <span>${escapeHtml(project.category)}</span>
+          <span class="sep" aria-hidden="true">/</span>
+          <span>${escapeHtml(project.year)}</span>
+        </p>
+        <p class="project-copy">${escapeHtml(project.description)}</p>
+        <p class="project-tags">${project.tags.map(escapeHtml).join(" &middot; ")}</p>
       </div>
     </article>`).join("");
 }
 
-function renderGames() {
-  const grid = qs("[data-game-grid]");
-  if (!games.length) {
-    grid.innerHTML = '<p class="network-empty">No Roblox experiences are configured yet.</p>';
-    return;
-  }
-  grid.innerHTML = games.map((game, index) => {
-    const initialImage = game.cachedImage || game.fallback;
-    return `
-    <a class="game-card reveal" href="${escapeHtml(game.url)}" target="_blank" rel="noopener noreferrer" data-game-id="${game.id}" data-tilt style="--reveal-delay:${Math.min(index * 100, 300)}ms;--card-index:${index}">
-      <div class="media-shell" data-state="fallback">
-        <div class="media-skeleton" aria-hidden="true"></div>
-        <img class="media-image" src="${escapeHtml(initialImage)}" alt="Official Roblox artwork for ${escapeHtml(game.name)}" width="512" height="512" loading="lazy" decoding="async">
-        <span class="media-type-badge">${icon("roblox")} Roblox experience</span>
+function renderExperiences() {
+  const list = qs("[data-experience-list]");
+  if (!list) return;
+  list.innerHTML = games.map(game => `
+    <article class="experience reveal">
+      <img class="experience-thumb" src="${escapeHtml(game.cachedImage ?? game.fallback)}"
+           data-fallback="${escapeHtml(game.fallback)}"
+           alt="Thumbnail for ${escapeHtml(game.name)}"
+           width="496" height="279" loading="lazy" decoding="async">
+      <div>
+        <h3 class="experience-name">${escapeHtml(game.name)}</h3>
+        <p class="experience-meta">${escapeHtml(game.creator)} &middot; ${escapeHtml(game.role)}</p>
+        <p class="experience-copy">${escapeHtml(game.description)}</p>
+        <a class="text-link" href="${escapeHtml(game.url)}" target="_blank" rel="noopener noreferrer">
+          Open on Roblox${icon("external")}
+        </a>
       </div>
-      <div class="game-card-body">
-        <div class="game-card-head"><h3 data-game-name>${escapeHtml(game.name)}</h3><span class="game-card-arrow" aria-hidden="true">${icon("external")}</span></div>
-        <p data-game-description>${escapeHtml(game.description)}</p>
-        <dl class="game-credits">
-          <div><dt>Created by</dt><dd data-game-creator>${escapeHtml(game.creator)}</dd></div>
-          <div><dt>My role</dt><dd>${escapeHtml(game.role)}</dd></div>
-        </dl>
-      </div>
-    </a>`;
-  }).join("");
+    </article>`).join("");
+  attachImageFallbacks(list);
 }
 
-function renderSkills() {
-  qs("[data-skill-grid]").innerHTML = skills.map((skill, index) => `
-    <article class="skill-item reveal" style="--reveal-delay:${Math.min(index * 65, 390)}ms;--skill:${Number(skill.percentage) || 0}%">
-      <span class="skill-code">${String(index + 1).padStart(2, "0")}</span>
-      <div class="skill-copy"><div class="skill-title-row"><h3>${escapeHtml(skill.title)}</h3><strong><span data-skill-value="${Number(skill.percentage) || 0}">0</span>%</strong></div><p>${escapeHtml(skill.description)}</p><div class="skill-meter" aria-label="${escapeHtml(skill.title)} proficiency: ${Number(skill.percentage) || 0} percent"><span></span></div></div>
-    </article>`).join("");
+function renderCapabilities() {
+  const list = qs("[data-capability-list]");
+  if (!list) return;
+  list.innerHTML = capabilities.map(item => `
+    <div class="capability reveal">
+      <dt>${escapeHtml(item.title)}</dt>
+      <dd>${escapeHtml(item.description)}</dd>
+    </div>`).join("");
 }
 
 function renderProcess() {
-  const processIcons = ["clipboardList", "code2", "bug", "packageCheck"];
-  qs("[data-process-grid]").innerHTML = process.map((item, index) => `
-    <li class="process-card reveal process-card-${index + 1}" data-tilt style="--reveal-delay:${index * 80}ms;--process-index:${index}">
-      <span class="process-icon" aria-hidden="true">${icon(processIcons[index] || "code")}</span>
-      <span class="process-orbit" aria-hidden="true"></span>
-      <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description)}</p>
+  const list = qs("[data-process-list]");
+  if (!list) return;
+  list.innerHTML = process.map((step, index) => `
+    <li class="process-step reveal">
+      <span class="process-index">${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(step.title)}</h3>
+      <p>${escapeHtml(step.description)}</p>
     </li>`).join("");
 }
 
-function networkCard(item, type, index) {
-  const id = type === "roblox" ? item.groupId : item.inviteCode;
-  const typeIcon = type === "roblox" ? "roblox" : "discord";
-  return `
-    <a class="network-card reveal" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" data-network-type="${type}" data-network-id="${escapeHtml(id)}" data-tilt style="--reveal-delay:${Math.min(index * 55, 220)}ms">
-      <div class="network-icon-shell" data-state="fallback">
-        <div class="media-skeleton" aria-hidden="true"></div>
-        <img class="network-icon" src="${escapeHtml(item.cachedImage || item.fallback)}" alt="${escapeHtml(item.name)} icon" width="150" height="150" loading="lazy" decoding="async">
-        <span class="network-platform" aria-hidden="true">${icon(typeIcon)}</span>
-      </div>
-      <div><h4>${escapeHtml(item.name)}</h4><p>${escapeHtml(item.description)}</p><span class="network-role">${escapeHtml(item.role)}</span></div>
-      <span class="network-arrow" aria-hidden="true">${icon("external")}</span>
-    </a>`;
-}
-
 function renderNetwork() {
-  qs("[data-roblox-groups]").innerHTML = robloxGroups.length
-    ? robloxGroups.map((item, index) => networkCard(item, "roblox", index)).join("")
-    : '<p class="network-empty">No Roblox groups are configured.</p>';
-  qs("[data-discord-servers]").innerHTML = discordServers.length
-    ? discordServers.map((item, index) => networkCard(item, "discord", index)).join("")
-    : '<p class="network-empty">No Discord servers are configured.</p>';
+  const entry = (item, external) => `
+    <li>
+      <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">
+        <img src="${escapeHtml(item.cachedImage ?? item.fallback)}"
+             data-fallback="${escapeHtml(item.fallback)}"
+             alt="" width="44" height="44" loading="lazy" decoding="async">
+        <span class="network-copy">
+          <strong>${escapeHtml(item.name)}</strong>
+          <small>${escapeHtml(item.description)}</small>
+        </span>
+        <span class="network-role">${escapeHtml(item.role)}</span>
+      </a>
+    </li>`;
+
+  const groups = qs("[data-roblox-groups]");
+  const servers = qs("[data-discord-servers]");
+  if (groups) {
+    groups.innerHTML = robloxGroups.map(entry).join("");
+    attachImageFallbacks(groups);
+  }
+  if (servers) {
+    servers.innerHTML = discordServers.map(entry).join("");
+    attachImageFallbacks(servers);
+  }
 }
 
 function renderReviews() {
   const list = qs("[data-review-list]");
-  if (!reviews.length) {
-    list.innerHTML = '<p class="network-empty">Verified client feedback will appear here.</p>';
-    return;
-  }
-  list.innerHTML = `
-    <div class="review-stage reveal" data-review-stage tabindex="0" aria-label="Client testimonial slideshow">
-      <article class="review-card" data-review-card>
-        <div class="review-topline">
-          <span class="review-index" data-review-count>01 / ${String(reviews.length).padStart(2, "0")}</span>
-          <span class="review-rating" aria-label="5 out of 5 stars">★★★★★</span>
-        </div>
-        <blockquote>
-          <span class="review-quote-mark" aria-hidden="true">“</span>
-          <span data-review-typed aria-hidden="true"></span><span class="type-caret" aria-hidden="true"></span>
-        </blockquote>
-        <p class="sr-only" data-review-full aria-live="polite"></p>
-        <div class="review-source" data-review-source>
-          <div class="review-person">
-            <strong data-review-name></strong>
-            <span data-review-location></span>
-          </div>
-          <dl class="review-details">
-            <div><dt>Budget</dt><dd data-review-price></dd></div>
-            <div><dt>Delivery</dt><dd data-review-duration></dd></div>
-            <div><dt>Posted</dt><dd data-review-age></dd></div>
-          </dl>
-          <a data-review-platform target="_blank" rel="noopener noreferrer"></a>
-        </div>
-        <div class="review-footer">
-          <div class="review-dots" role="tablist" aria-label="Choose testimonial">
-            ${reviews.map((_, index) => `<button type="button" role="tab" aria-label="Show testimonial ${index + 1}" data-review-dot="${index}"></button>`).join("")}
-          </div>
-          <div class="review-controls">
-            <button type="button" data-review-prev aria-label="Previous testimonial">←</button>
-            <button type="button" data-review-next aria-label="Next testimonial">→</button>
-          </div>
-        </div>
-      </article>
-      <div class="review-progress" aria-hidden="true"><span data-review-progress></span></div>
-    </div>`;
+  if (!list) return;
+  list.innerHTML = reviews.map(review => `
+    <li class="review reveal">
+      <p class="review-stars" role="img" aria-label="${review.rating} out of 5 stars">
+        ${icon("star").repeat(review.rating)}
+      </p>
+      <blockquote>${escapeHtml(review.quote)}</blockquote>
+      <p class="review-by">
+        ${escapeHtml(review.name)}
+        ${review.repeatClient ? '<span class="review-repeat">Repeat client</span>' : ""}
+      </p>
+      <p class="review-facts">
+        ${escapeHtml(review.location)} &middot; ${escapeHtml(review.price)} &middot;
+        ${escapeHtml(review.duration)} &middot; ${escapeHtml(review.age)}
+      </p>
+    </li>`).join("");
 }
 
-function setupReviewCarousel() {
-  const stage = qs("[data-review-stage]");
-  if (!stage || !reviews.length) return;
+/* ---------------------------------------------------------------- behaviour */
 
-  const card = qs("[data-review-card]", stage);
-  const typed = qs("[data-review-typed]", stage);
-  const full = qs("[data-review-full]", stage);
-  const name = qs("[data-review-name]", stage);
-  const location = qs("[data-review-location]", stage);
-  const platform = qs("[data-review-platform]", stage);
-  const price = qs("[data-review-price]", stage);
-  const duration = qs("[data-review-duration]", stage);
-  const age = qs("[data-review-age]", stage);
-  const count = qs("[data-review-count]", stage);
-  const progress = qs("[data-review-progress]", stage);
-  const dots = qsa("[data-review-dot]", stage);
-  let current = 0;
-  let frame = 0;
-  let transitionTimer = 0;
-  let advanceTimer = 0;
-  let progressFrame = 0;
-  let paused = false;
-  let started = false;
-  let complete = false;
+function setupHeader() {
+  const header = qs("[data-header]");
+  if (!header) return;
+  const sentinel = () => header.classList.toggle("is-stuck", window.scrollY > 8);
+  sentinel();
+  addEventListener("scroll", sentinel, { passive: true });
+}
 
-  const clearMotion = () => {
-    cancelAnimationFrame(frame);
-    cancelAnimationFrame(progressFrame);
-    clearTimeout(transitionTimer);
-    clearTimeout(advanceTimer);
+function setupMobileNav() {
+  const toggle = qs("[data-menu-toggle]");
+  const nav = qs("[data-mobile-nav]");
+  if (!toggle || !nav) return;
+
+  const setOpen = open => {
+    nav.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    toggle.innerHTML = icon(open ? "x" : "menu");
   };
 
-  const updateStaticContent = review => {
-    name.textContent = review.name;
-    location.textContent = `${review.location}${review.repeatClient ? " · Repeat client" : ""}`;
-    price.textContent = review.price || "Not listed";
-    duration.textContent = review.duration || "Not listed";
-    age.textContent = review.age || "Client review";
-    platform.textContent = `View on ${review.platform}`;
-    platform.href = review.platformUrl;
-    count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(reviews.length).padStart(2, "0")}`;
-    full.textContent = `“${review.quote}” — ${review.name}, ${review.platform}`;
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("is-active", index === current);
-      dot.setAttribute("aria-selected", String(index === current));
-      dot.tabIndex = index === current ? 0 : -1;
-    });
-  };
+  toggle.addEventListener("click", () => setOpen(nav.hidden));
+  nav.addEventListener("click", event => {
+    if (event.target.closest("a")) setOpen(false);
+  });
+  addEventListener("keydown", event => {
+    if (event.key === "Escape" && !nav.hidden) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  matchMedia("(min-width: 900px)").addEventListener("change", event => {
+    if (event.matches) setOpen(false);
+  });
+}
 
-  const scheduleAdvance = () => {
-    clearTimeout(advanceTimer);
-    cancelAnimationFrame(progressFrame);
-    progress.style.transform = "scaleX(0)";
-    if (paused || reducedMotion) return;
-    const duration = 6200;
-    const start = performance.now();
-    const tick = now => {
-      const amount = Math.min((now - start) / duration, 1);
-      progress.style.transform = `scaleX(${amount})`;
-      if (amount < 1 && !paused) progressFrame = requestAnimationFrame(tick);
-    };
-    progressFrame = requestAnimationFrame(tick);
-    advanceTimer = setTimeout(() => showSlide(current + 1), duration);
-  };
+/** Mark the nav link matching the section currently in view. */
+function setupScrollSpy() {
+  const links = qsa('.primary-nav a[href^="#"], .mobile-nav a[href^="#"]');
+  if (!links.length || !("IntersectionObserver" in window)) return;
 
-  const finishTyping = () => {
-    complete = true;
-    card.classList.remove("is-typing");
-    card.classList.add("is-complete");
-    scheduleAdvance();
-  };
+  // Keep document order so the topmost visible section wins, not link order.
+  const linked = new Set(links.map(link => link.hash.slice(1)));
+  const sections = qsa("main section[id]").filter(section => linked.has(section.id));
 
-  const typeQuote = text => {
-    typed.textContent = "";
-    complete = false;
-    const duration = Math.min(Math.max(text.length * 38, 1400), 4700);
-    const start = performance.now();
-    card.classList.add("is-typing");
-    const tick = now => {
-      const amount = Math.min((now - start) / duration, 1);
-      const characters = Math.max(1, Math.floor(text.length * amount));
-      typed.textContent = text.slice(0, characters);
-      if (amount < 1) frame = requestAnimationFrame(tick);
-      else finishTyping();
-    };
-    frame = requestAnimationFrame(tick);
-  };
-
-  function showSlide(nextIndex, instant = false) {
-    clearMotion();
-    current = (nextIndex + reviews.length) % reviews.length;
-    complete = false;
-    card.classList.remove("is-complete", "is-typing");
-    card.classList.add("is-changing");
-    progress.style.transform = "scaleX(0)";
-
-    const swap = () => {
-      const review = reviews[current];
-      updateStaticContent(review);
-      typed.textContent = reducedMotion || instant ? review.quote : "";
-      card.classList.remove("is-changing");
-      if (reducedMotion || instant) finishTyping();
-      else typeQuote(review.quote);
-    };
-
-    transitionTimer = setTimeout(swap, instant ? 0 : 520);
-  }
-
-  qs("[data-review-prev]", stage).addEventListener("click", () => showSlide(current - 1));
-  qs("[data-review-next]", stage).addEventListener("click", () => showSlide(current + 1));
-  dots.forEach(dot => dot.addEventListener("click", () => showSlide(Number(dot.dataset.reviewDot))));
-
-  const pause = () => {
-    paused = true;
-    clearTimeout(advanceTimer);
-    cancelAnimationFrame(progressFrame);
-  };
-  const resume = () => {
-    paused = false;
-    if (complete) scheduleAdvance();
-  };
-  stage.addEventListener("pointerenter", pause);
-  stage.addEventListener("pointerleave", resume);
-  stage.addEventListener("focusin", pause);
-  stage.addEventListener("focusout", event => { if (!stage.contains(event.relatedTarget)) resume(); });
-
-  if (reducedMotion) {
-    started = true;
-    showSlide(0, true);
-    return;
-  }
-
+  const visible = new Set();
   const observer = new IntersectionObserver(entries => {
-    if (!started && entries.some(entry => entry.isIntersecting)) {
-      started = true;
-      showSlide(0);
-      observer.disconnect();
-    }
-  }, { threshold: .35 });
-  observer.observe(stage);
+    entries.forEach(entry => {
+      if (entry.isIntersecting) visible.add(entry.target.id);
+      else visible.delete(entry.target.id);
+    });
+    const current = sections.find(section => visible.has(section.id))?.id;
+    links.forEach(link => {
+      if (current && link.hash === `#${current}`) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+
+  sections.forEach(section => observer.observe(section));
 }
 
-async function hydrateGameMedia() {
-  const [images, details] = await Promise.all([
-    getRobloxGameImages(games).catch(() => new Map()),
-    getRobloxGameDetails(games).catch(() => new Map()),
-  ]);
-  await Promise.all(games.map(async game => {
-    const card = qs(`[data-game-id="${game.id}"]`);
-    if (!card) return;
-    const shell = qs(".media-shell", card);
-    const img = qs(".media-image", card);
-    const media = images.get(game.id);
-    const localImage = game.cachedImage || game.fallback;
-    await loadImageSafely(img, media?.imageUrl, localImage, shell);
+/** Group-level reveal: one observer, elements fade in place. */
+function setupReveal() {
+  const targets = qsa(".reveal");
+  if (prefersReducedMotion.matches || !("IntersectionObserver" in window)) {
+    targets.forEach(target => target.classList.add("is-static"));
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
 
-    const official = details.get(game.id);
-    if (official?.name) qs("[data-game-name]", card).textContent = official.name;
-    if (official?.creator) qs("[data-game-creator]", card).textContent = official.creator;
-    if (official?.description) qs("[data-game-description]", card).textContent = official.description;
-  }));
+  targets.forEach(target => observer.observe(target));
 }
 
-async function hydrateRobloxGroups() {
-  const results = await getRobloxGroupImages(robloxGroups);
-  await Promise.all(robloxGroups.map(async group => {
-    const card = qs(`[data-network-type="roblox"][data-network-id="${group.groupId}"]`);
-    if (!card) return;
-    await loadImageSafely(qs(".network-icon", card), results.get(group.groupId)?.imageUrl, group.cachedImage || group.fallback, qs(".network-icon-shell", card));
-  }));
-}
+function setupPlayer() {
+  const dialog = qs("[data-player]");
+  const video = qs("[data-player-video]", dialog ?? document);
+  const title = qs("[data-player-title]", dialog ?? document);
+  const close = qs("[data-player-close]", dialog ?? document);
+  if (!dialog || !video || !title || !close) return;
 
-async function hydrateDiscordServers() {
-  await Promise.all(discordServers.map(async server => {
-    const card = qs(`[data-network-type="discord"][data-network-id="${server.inviteCode}"]`);
-    if (!card) return;
-    const shell = qs(".network-icon-shell", card);
-    const img = qs(".network-icon", card);
-    try {
-      const info = await getDiscordServer(server);
-      await loadImageSafely(img, info.iconUrl, server.cachedImage || server.fallback, shell);
-      const description = qs("p", card);
-      if (info.memberCount) description.textContent = `${Number(info.memberCount).toLocaleString()} members · ${server.description}`;
-    } catch {
-      await loadImageSafely(img, null, server.cachedImage || server.fallback, shell);
-    }
-  }));
-}
-
-function setupDialog() {
-  const dialog = qs("[data-media-dialog]");
-  if (!dialog) return;
-  const video = qs("[data-dialog-video]", dialog);
-  const shell = qs(".dialog-video-shell", dialog);
-  const title = qs("[data-dialog-title]", dialog);
-  const status = qs("[data-dialog-status]", dialog);
-  const toggle = qs("[data-video-toggle]", dialog);
-  const playIcon = qs("[data-video-play-icon]", dialog);
-  const progress = qs("[data-video-progress]", dialog);
-  const time = qs("[data-video-time]", dialog);
-  const mute = qs("[data-video-mute]", dialog);
-  const volumeIcon = qs("[data-video-volume-icon]", dialog);
-  const volume = qs("[data-video-volume]", dialog);
-  const fullscreen = qs("[data-video-fullscreen]", dialog);
-
-  const formatTime = seconds => {
-    if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
-    const minutes = Math.floor(seconds / 60);
-    const remainder = Math.floor(seconds % 60);
-    return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
+  const open = trigger => {
+    title.textContent = trigger.dataset.title ?? "Project demo";
+    video.src = trigger.dataset.video;
+    dialog.showModal();
+    video.play().catch(() => { /* autoplay may be blocked; controls remain */ });
   };
 
-  const updatePlayState = () => {
-    const playing = !video.paused && !video.ended;
-    playIcon.textContent = playing ? "❚❚" : "▶";
-    toggle.setAttribute("aria-label", playing ? "Pause video" : "Play video");
-    shell.classList.toggle("is-playing", playing);
-  };
-
-  const updateTimeline = () => {
-    const duration = Number.isFinite(video.duration) ? video.duration : 0;
-    const ratio = duration > 0 ? video.currentTime / duration : 0;
-    progress.value = String(Math.round(ratio * 1000));
-    progress.style.setProperty("--progress", `${Math.max(0, Math.min(100, ratio * 100))}%`);
-    time.textContent = `${formatTime(video.currentTime)} / ${formatTime(duration)}`;
-  };
-
-  const updateAudioStatus = () => {
-    const muted = video.muted || video.volume === 0;
-    status.classList.toggle("is-muted", muted);
-    status.lastChild.textContent = muted
-      ? " Audio muted — use the custom volume control to enable sound."
-      : " Audio enabled — use the custom controls below.";
-    volumeIcon.textContent = muted ? "🔇" : video.volume < .45 ? "🔉" : "🔊";
-    mute.setAttribute("aria-label", muted ? "Unmute video" : "Mute video");
-    if (!video.muted) volume.value = String(video.volume);
-  };
-
-  const close = () => {
+  const shut = () => {
     video.pause();
     video.removeAttribute("src");
-    video.removeAttribute("poster");
     video.load();
-    shell.dataset.loading = "false";
-    document.body.classList.remove("dialog-open");
-    if (dialog.open) dialog.close();
   };
 
   document.addEventListener("click", event => {
     const trigger = event.target.closest("[data-video]");
-    if (!trigger) return;
-    title.textContent = trigger.dataset.title;
-    video.poster = trigger.dataset.poster || "";
-    video.src = trigger.dataset.video;
-    video.muted = false;
-    video.volume = .9;
-    volume.value = ".9";
-    shell.dataset.loading = "true";
-    document.body.classList.add("dialog-open");
-    dialog.showModal();
-    updateAudioStatus();
-    updatePlayState();
-    updateTimeline();
-    video.play().catch(() => {
-      status.lastChild.textContent = " Press play to start this demo with audio.";
-      updatePlayState();
-    });
+    if (trigger) open(trigger);
   });
 
-  video.removeAttribute("controls");
-  video.setAttribute("controlsList", "nodownload noplaybackrate noremoteplayback");
-  video.disablePictureInPicture = true;
-  video.setAttribute("disablePictureInPicture", "");
-  video.setAttribute("disableRemotePlayback", "");
-  video.addEventListener("contextmenu", event => event.preventDefault());
-  video.addEventListener("dragstart", event => event.preventDefault());
-  video.addEventListener("canplay", () => { shell.dataset.loading = "false"; updateTimeline(); });
-  video.addEventListener("loadedmetadata", updateTimeline);
-  video.addEventListener("timeupdate", updateTimeline);
-  video.addEventListener("durationchange", updateTimeline);
-  video.addEventListener("playing", () => { shell.dataset.loading = "false"; updatePlayState(); });
-  video.addEventListener("pause", updatePlayState);
-  video.addEventListener("ended", updatePlayState);
-  video.addEventListener("volumechange", updateAudioStatus);
-  video.addEventListener("click", () => video.paused ? video.play() : video.pause());
-  video.addEventListener("error", () => {
-    shell.dataset.loading = "false";
-    status.lastChild.textContent = " This video could not be loaded. Try opening the portfolio through a web server.";
+  close.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("close", shut);
+  dialog.addEventListener("click", event => {
+    if (event.target === dialog) dialog.close();
   });
-
-  toggle.addEventListener("click", () => video.paused ? video.play() : video.pause());
-  progress.addEventListener("input", () => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
-    video.currentTime = (Number(progress.value) / 1000) * video.duration;
-    updateTimeline();
-  });
-  mute.addEventListener("click", () => {
-    video.muted = !video.muted;
-    if (!video.muted && video.volume === 0) video.volume = .7;
-  });
-  volume.addEventListener("input", () => {
-    video.volume = Number(volume.value);
-    video.muted = video.volume === 0;
-  });
-  fullscreen.addEventListener("click", async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await shell.requestFullscreen();
-    } catch (error) {
-      console.warn("Fullscreen unavailable", error);
-    }
-  });
-  document.addEventListener("fullscreenchange", () => {
-    fullscreen.textContent = document.fullscreenElement ? "↙" : "⛶";
-    fullscreen.setAttribute("aria-label", document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen");
-  });
-
-  qs("[data-dialog-close]", dialog).addEventListener("click", close);
-  dialog.addEventListener("click", event => { if (event.target === dialog) close(); });
-  dialog.addEventListener("cancel", event => { event.preventDefault(); close(); });
 }
 
-function setupNavigation() {
-  const toggle = qs("[data-menu-toggle]");
-  const nav = qs("[data-mobile-nav]");
-  const setOpen = open => {
-    toggle.setAttribute("aria-expanded", String(open));
-    nav.dataset.open = String(open);
-    nav.setAttribute("aria-hidden", String(!open));
-    nav.inert = !open;
-    document.body.classList.toggle("menu-open", open);
-    qs(".sr-only", toggle).textContent = open ? "Close navigation" : "Open navigation";
+function setupContract() {
+  const contract = qs("[data-contract]");
+  if (!contract) return;
+  const viewport = qs("[data-contract-viewport]", contract);
+  const current = qs("[data-contract-current]", contract);
+  const previous = qs("[data-contract-prev]", contract);
+  const next = qs("[data-contract-next]", contract);
+  const pages = qsa("[data-contract-page]", contract);
+  if (!viewport || !pages.length) return;
+
+  let index = 0;
+
+  const sync = () => {
+    current.textContent = String(index + 1);
+    previous.disabled = index === 0;
+    next.disabled = index === pages.length - 1;
   };
-  setOpen(false);
-  toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
-  nav.addEventListener("click", event => { if (event.target.closest("a")) setOpen(false); });
-  addEventListener("resize", () => { if (innerWidth > 1000) setOpen(false); });
-  addEventListener("keydown", event => { if (event.key === "Escape") setOpen(false); });
 
-  const sections = qsa("main section[id]");
-  const links = qsa(".desktop-nav a");
-  const observer = new IntersectionObserver(entries => {
-    const current = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!current) return;
-    links.forEach(link => link.toggleAttribute("aria-current", link.hash === `#${current.target.id}`));
-  }, { rootMargin: "-35% 0px -55%", threshold: [0, .1, .5] });
-  sections.forEach(section => observer.observe(section));
-}
+  const goTo = target => {
+    index = Math.min(Math.max(target, 0), pages.length - 1);
+    pages[index].scrollIntoView({
+      behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+    sync();
+  };
 
-function setupReveal() {
-  const items = qsa(".reveal");
-  if (reducedMotion) {
-    items.forEach(item => item.classList.add("is-visible"));
-    return;
+  previous.addEventListener("click", () => goTo(index - 1));
+  next.addEventListener("click", () => goTo(index + 1));
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      const active = entries.filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!active) return;
+      index = pages.indexOf(active.target);
+      sync();
+    }, { root: viewport, threshold: 0.55 });
+    pages.forEach(page => observer.observe(page));
   }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: "0px 0px -7%", threshold: .08 });
-  items.forEach(item => observer.observe(item));
-}
 
-function setupScrollEffects() {
-  const progress = qs("[data-scroll-progress]");
-  const header = qs("[data-header]");
-  let ticking = false;
-  const update = () => {
-    const max = Math.max(document.documentElement.scrollHeight - innerHeight, 1);
-    progress.style.transform = `scaleX(${Math.min(scrollY / max, 1)})`;
-    header.classList.toggle("is-scrolled", scrollY > 16);
-    ticking = false;
-  };
-  addEventListener("scroll", () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(update);
-    }
-  }, { passive: true });
-  update();
-}
-
-function setupPointerInteractions() {
-  if (reducedMotion || !finePointer) return;
-  const halo = qs(".pointer-halo");
-  let pointerX = innerWidth / 2;
-  let pointerY = innerHeight / 2;
-  let haloX = pointerX;
-  let haloY = pointerY;
-  addEventListener("pointermove", event => { pointerX = event.clientX; pointerY = event.clientY; }, { passive: true });
-
-  const tiltItems = qsa("[data-tilt], [data-tilt-soft]").map(element => ({
-    element,
-    strength: element.hasAttribute("data-tilt-soft") ? 2.2 : 4.4,
-    depth: element.hasAttribute("data-tilt-soft") ? 6 : 11,
-    tx: 0, ty: 0, cx: 0, cy: 0, px: 0, py: 0, cpx: 0, cpy: 0, sx: 50, sy: 50,
-  }));
-  tiltItems.forEach(item => {
-    item.element.addEventListener("pointermove", event => {
-      const rect = item.element.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width - .5;
-      const py = (event.clientY - rect.top) / rect.height - .5;
-      item.tx = -py * item.strength;
-      item.ty = px * item.strength;
-      item.px = px * item.depth;
-      item.py = py * item.depth;
-      item.sx = (px + .5) * 100;
-      item.sy = (py + .5) * 100;
-    });
-    item.element.addEventListener("pointerleave", () => { item.tx = 0; item.ty = 0; item.px = 0; item.py = 0; item.sx = 50; item.sy = 50; });
-  });
-
-  const magneticItems = qsa("[data-magnetic]").map(element => ({ element, tx: 0, ty: 0, cx: 0, cy: 0 }));
-  magneticItems.forEach(item => {
-    item.element.addEventListener("pointermove", event => {
-      const rect = item.element.getBoundingClientRect();
-      item.tx = (event.clientX - (rect.left + rect.width / 2)) * .035;
-      item.ty = (event.clientY - (rect.top + rect.height / 2)) * .05;
-    });
-    item.element.addEventListener("pointerleave", () => { item.tx = 0; item.ty = 0; });
-  });
-
-  const tick = () => {
-    haloX += (pointerX - haloX) * .075;
-    haloY += (pointerY - haloY) * .075;
-    halo.style.transform = `translate3d(${haloX}px, ${haloY}px, 0)`;
-    const quadFollow = 1 - Math.pow(1 - .09, 2);
-    tiltItems.forEach(item => {
-      item.cx += (item.tx - item.cx) * quadFollow;
-      item.cy += (item.ty - item.cy) * quadFollow;
-      item.cpx += (item.px - item.cpx) * quadFollow;
-      item.cpy += (item.py - item.cpy) * quadFollow;
-      item.element.style.setProperty("--tilt-x", `${item.cx.toFixed(3)}deg`);
-      item.element.style.setProperty("--tilt-y", `${item.cy.toFixed(3)}deg`);
-      item.element.style.setProperty("--parallax-x", `${item.cpx.toFixed(2)}px`);
-      item.element.style.setProperty("--parallax-y", `${item.cpy.toFixed(2)}px`);
-      item.element.style.setProperty("--spot-x", `${item.sx.toFixed(1)}%`);
-      item.element.style.setProperty("--spot-y", `${item.sy.toFixed(1)}%`);
-    });
-    magneticItems.forEach(item => {
-      item.cx += (item.tx - item.cx) * .075;
-      item.cy += (item.ty - item.cy) * .075;
-      item.element.style.setProperty("--mag-x", `${item.cx.toFixed(2)}px`);
-      item.element.style.setProperty("--mag-y", `${item.cy.toFixed(2)}px`);
-    });
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-function setupCounters() {
-  const counters = qsa("[data-count]");
-  if (reducedMotion) return;
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const element = entry.target;
-      const target = Number(element.dataset.count);
-      const start = performance.now();
-      const duration = 850;
-      const tick = now => {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        element.textContent = String(Math.round(target * eased));
-        if (progress < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-      observer.unobserve(element);
-    });
-  }, { threshold: .55 });
-  counters.forEach(counter => observer.observe(counter));
-}
-
-function setupLiveClock() {
-  const clocks = qsa("[data-live-clock]");
-  if (!clocks.length) return;
-  const formatter = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Asia/Manila",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-  const update = () => clocks.forEach(clock => { clock.textContent = `${formatter.format(new Date())} PHT`; });
-  update();
-  setInterval(update, 1000);
-}
-
-function setupLiveMetrics() {
-  const metrics = qsa("[data-live-count]");
-  const rail = qs(".live-metrics");
-  if (!metrics.length || !rail) return;
-  if (reducedMotion) { metrics.forEach(metric => { metric.textContent = metric.dataset.liveCount || "0"; }); return; }
-  let played = false;
-  const observer = new IntersectionObserver(entries => {
-    if (played || !entries.some(entry => entry.isIntersecting)) return;
-    played = true;
-    const startTime = performance.now();
-    const duration = 1500;
-    const tick = now => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      metrics.forEach(metric => {
-        const target = Number(metric.dataset.liveCount) || 0;
-        metric.textContent = String(Math.round(target * eased));
-        if (progress === 1) metric.closest(".live-metric")?.classList.add("is-counted");
-      });
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-    observer.disconnect();
-  }, { threshold: .35 });
-  observer.observe(rail);
-}
-function setupTextScramble() {
-  if (reducedMotion || !finePointer) return;
-  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+-";
-  qsa(".section-kicker span:last-child, [data-scramble]").forEach(element => {
-    const original = element.textContent;
-    let running = false;
-    element.addEventListener("pointerenter", () => {
-      if (running) return;
-      running = true;
-      const start = performance.now();
-      const duration = 520;
-      const tick = now => {
-        const progress = Math.min((now - start) / duration, 1);
-        const revealed = Math.floor(original.length * progress);
-        element.textContent = [...original].map((character, index) => {
-          if (character === " ") return " ";
-          return index < revealed ? character : glyphs[Math.floor(Math.random() * glyphs.length)];
-        }).join("");
-        if (progress < 1) requestAnimationFrame(tick);
-        else {
-          element.textContent = original;
-          running = false;
-        }
-      };
-      requestAnimationFrame(tick);
-    });
-  });
-}
-
-function setupHeroParallax() {
-  if (reducedMotion || !finePointer) return;
-  const hero = qs(".hero");
-  if (!hero) return;
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-  hero.addEventListener("pointermove", event => {
-    const rect = hero.getBoundingClientRect();
-    tx = (event.clientX - rect.left) / rect.width - .5;
-    ty = (event.clientY - rect.top) / rect.height - .5;
-  });
-  hero.addEventListener("pointerleave", () => { tx = 0; ty = 0; });
-  const tick = () => {
-    cx += (tx - cx) * .055;
-    cy += (ty - cy) * .055;
-    hero.style.setProperty("--hero-x", cx.toFixed(4));
-    hero.style.setProperty("--hero-y", cy.toFixed(4));
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-function setupDownloadPulse() {
-  qsa("[data-source-download]").forEach(link => {
-    link.addEventListener("click", () => {
-      link.classList.remove("is-downloading");
-      requestAnimationFrame(() => link.classList.add("is-downloading"));
-      setTimeout(() => link.classList.remove("is-downloading"), 1300);
-    });
-  });
-}
-
-function setupSkillMeters() {
-  const items = qsa(".skill-item");
-  if (!items.length) return;
-  const run = item => {
-    const element = qs("[data-skill-value]", item);
-    if (!element || item.dataset.meterStarted === "true") return;
-    item.dataset.meterStarted = "true";
-    const target = Number(element.dataset.skillValue || 0);
-    item.classList.add("is-meter-active");
-    if (reducedMotion) { element.textContent = String(target); return; }
-    const start = performance.now();
-    const duration = 1650;
-    const tick = now => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      element.textContent = progress >= 1 ? String(target) : String(Math.round(target * eased));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    run(entry.target);
-    observer.unobserve(entry.target);
-  }), { threshold: .12, rootMargin: "0px 0px -8% 0px" });
-  items.forEach(item => observer.observe(item));
-}
-
-function setupAmbientCanvas() {
-  const canvas = qs("[data-ambient-canvas]");
-  if (!canvas || reducedMotion) return;
-  const ctx = canvas.getContext("2d", { alpha: true });
-  let width = 0, height = 0, dpr = 1;
-  let pointer = { x: -9999, y: -9999 };
-  let particles = [];
-  const resize = () => {
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    width = innerWidth;
-    height = innerHeight;
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const count = Math.max(22, Math.min(64, Math.round(width / 28)));
-    particles = Array.from({ length: count }, (_, index) => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - .5) * (.16 + (index % 4) * .025),
-      vy: (Math.random() - .5) * (.16 + (index % 3) * .025),
-      r: .6 + Math.random() * 1.25,
-      phase: Math.random() * Math.PI * 2,
-    }));
-  };
-  addEventListener("resize", resize, { passive: true });
-  addEventListener("pointermove", event => { pointer.x = event.clientX; pointer.y = event.clientY; }, { passive: true });
-  addEventListener("pointerleave", () => { pointer.x = -9999; pointer.y = -9999; });
-  resize();
-  const tick = time => {
-    ctx.clearRect(0, 0, width, height);
-    for (let i = 0; i < particles.length; i += 1) {
-      const p = particles[i];
-      const dx = pointer.x - p.x;
-      const dy = pointer.y - p.y;
-      const distance = Math.hypot(dx, dy);
-      if (distance < 180) {
-        const force = (180 - distance) / 1800;
-        p.vx -= dx * force * .0018;
-        p.vy -= dy * force * .0018;
-      }
-      p.vx *= .997;
-      p.vy *= .997;
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < -20) p.x = width + 20;
-      if (p.x > width + 20) p.x = -20;
-      if (p.y < -20) p.y = height + 20;
-      if (p.y > height + 20) p.y = -20;
-      const pulse = .55 + Math.sin(time * .0012 + p.phase) * .3;
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(255,38,56,${.15 + pulse * .22})`;
-      ctx.arc(p.x, p.y, p.r + pulse * .35, 0, Math.PI * 2);
-      ctx.fill();
-      for (let j = i + 1; j < particles.length; j += 1) {
-        const q = particles[j];
-        const d = Math.hypot(p.x - q.x, p.y - q.y);
-        if (d < 118) {
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(255,38,56,${(1 - d / 118) * .085})`;
-          ctx.lineWidth = .7;
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+  sync();
 }
 
 function setupInquiryForm() {
   const form = qs("[data-inquiry-form]");
   if (!form) return;
-  const submit = qs("[data-inquiry-submit]", form);
-  const success = qs("[data-inquiry-success]", form);
-  const fields = qsa("input, select, textarea", form);
-
-  const resetSuccess = () => {
-    success.hidden = true;
-    success.classList.remove("is-visible");
-    form.classList.remove("is-success");
-  };
-  fields.forEach(field => field.addEventListener("input", resetSuccess));
+  const status = qs("[data-inquiry-status]", form);
+  const statusText = qs("span", status);
 
   form.addEventListener("submit", event => {
     event.preventDefault();
-    resetSuccess();
-    if (!form.reportValidity()) {
-      form.classList.remove("is-invalid");
-      requestAnimationFrame(() => form.classList.add("is-invalid"));
+
+    const fields = qsa("input, select, textarea", form);
+    fields.forEach(field => field.removeAttribute("aria-invalid"));
+
+    const invalid = fields.find(field => !field.checkValidity());
+    if (invalid) {
+      invalid.setAttribute("aria-invalid", "true");
+      invalid.focus();
+      status.hidden = false;
+      statusText.textContent = "Please complete the highlighted field.";
       return;
     }
-    form.classList.remove("is-invalid");
+
     const data = new FormData(form);
-    const name = String(data.get("name") || "").trim();
-    const email = String(data.get("email") || "").trim();
-    const type = String(data.get("projectType") || "").trim();
-    const timeline = String(data.get("timeline") || "Not specified").trim() || "Not specified";
-    const brief = String(data.get("brief") || "").trim();
-    const subject = `Roblox project inquiry — ${type}`;
+    const get = key => String(data.get(key) ?? "").trim();
+    const subject = `Roblox project inquiry — ${get("projectType")}`;
     const body = [
-      `Hi Nathaniel,`,
-      ``,
-      `My name is ${name}. I would like to discuss a Roblox project.`,
-      ``,
-      `Project type: ${type}`,
-      `Target timeline: ${timeline}`,
-      `Reply email: ${email}`,
-      ``,
-      `Project brief:`,
-      brief,
-      ``,
-      `I reviewed the Contract Agreement Form and would like to discuss the scope.`,
+      `Name: ${get("name")}`,
+      `Email: ${get("email")}`,
+      `Project type: ${get("projectType")}`,
+      `Target timeline: ${get("timeline") || "Not specified"}`,
+      "",
+      "Brief:",
+      get("brief"),
     ].join("\n");
 
-    submit.disabled = true;
-    submit.classList.add("is-sending");
-    setTimeout(() => {
-      submit.disabled = false;
-      submit.classList.remove("is-sending");
-      form.classList.add("is-success");
-      success.hidden = false;
-      requestAnimationFrame(() => success.classList.add("is-visible"));
-      const mailto = `mailto:nathanielmadridgaminde@proton.me?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      setTimeout(() => { window.location.href = mailto; }, 650);
-    }, reducedMotion ? 0 : 650);
+    status.hidden = false;
+    statusText.textContent = "Email prepared — your mail app should open shortly.";
+    location.href =
+      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }
 
-function setupContractViewer() {
-  const viewer = qs("[data-contract-viewer]");
-  if (!viewer) return;
-  const pages = qsa("[data-contract-page]", viewer);
-  const jumps = qsa("[data-contract-jump]", viewer);
-  const current = qs("[data-contract-current]", viewer);
-  const viewport = qs("[data-contract-viewport]", viewer);
-  const zoomIn = qs("[data-contract-zoom-in]", viewer);
-  const zoomOut = qs("[data-contract-zoom-out]", viewer);
-  let scale = 1;
+/* --------------------------------------------------------------------- init */
 
-  const setCurrent = pageNumber => {
-    if (current) current.textContent = String(pageNumber);
-    jumps.forEach(button => button.classList.toggle("is-active", button.dataset.contractJump === String(pageNumber)));
-  };
-  const applyScale = () => viewer.style.setProperty("--contract-scale", scale.toFixed(2));
-  zoomIn?.addEventListener("click", () => { scale = Math.min(1.35, scale + .1); applyScale(); });
-  zoomOut?.addEventListener("click", () => { scale = Math.max(.75, scale - .1); applyScale(); });
-  jumps.forEach(button => button.addEventListener("click", () => {
-    const page = pages.find(item => item.dataset.contractPage === button.dataset.contractJump);
-    page?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-  }));
+renderProjects();
+renderExperiences();
+renderCapabilities();
+renderProcess();
+renderNetwork();
+renderReviews();
 
-  const observer = new IntersectionObserver(entries => {
-    const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (visible) setCurrent(visible.target.dataset.contractPage);
-  }, { root: viewport, threshold: [.25, .45, .65] });
-  pages.forEach(page => observer.observe(page));
-}
-
-function validateExternalLinks() {
-  const invalid = qsa('a[target="_blank"]').filter(link => {
-    const href = link.getAttribute("href") || "";
-    return /^https?:\/\//i.test(href) && !/^https:\/\//i.test(href);
-  });
-  if (invalid.length) console.warn("Invalid external links detected", invalid);
-}
-
-function init() {
-  renderProjects();
-  renderGames();
-  renderSkills();
-  renderProcess();
-  renderNetwork();
-  renderReviews();
-  setupReviewCarousel();
-  setupDialog();
-  setupNavigation();
-  setupReveal();
-  setupScrollEffects();
-  setupPointerInteractions();
-  setupCounters();
-  setupSkillMeters();
-  setupLiveClock();
-  setupLiveMetrics();
-  setupTextScramble();
-  setupHeroParallax();
-  setupAmbientCanvas();
-  setupContractViewer();
-  setupInquiryForm();
-  setupDownloadPulse();
-  validateExternalLinks();
-
-  Promise.allSettled([hydrateGameMedia(), hydrateRobloxGroups(), hydrateDiscordServers()]).then(results => {
-    results.forEach(result => { if (result.status === "rejected") console.warn("Media hydration failed safely", result.reason); });
-  });
-}
-
-init();
+setupHeader();
+setupMobileNav();
+setupScrollSpy();
+setupPlayer();
+setupContract();
+setupInquiryForm();
+setupReveal();

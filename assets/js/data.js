@@ -100,15 +100,16 @@ export const games = [
   },
 ];
 
-export const skills = [
-  { title: "Programming Fundamentals", percentage: 95, description: "Writing clear Luau, structuring control flow, selecting suitable data structures, solving defects, and turning requirements into dependable game features." },
-  { title: "Software Architecture", percentage: 91, description: "Organizing larger projects into reusable modules and services with explicit responsibilities, predictable state, and code that another developer can extend." },
-  { title: "Gameplay Development", percentage: 94, description: "Building player mechanics, rounds, interactions, combat rules, cooldowns, NPC behaviour, and responsive feedback across client and server." },
-  { title: "Backend Development", percentage: 90, description: "Creating server-authoritative logic, validating requests, managing permissions and sessions, and keeping important game rules secure from the client." },
-  { title: "Database Management", percentage: 92, description: "Designing DataStore profiles, autosave, migrations, recovery paths, cross-server state, and reliable progression that survives disconnects and failures." },
-  { title: "User Interface Development", percentage: 87, description: "Developing responsive Roblox interfaces, menus, onboarding, shops, voting flows, camera states, and feedback that clearly communicates game state." },
-  { title: "Testing and Optimization", percentage: 89, description: "Reproducing edge cases, profiling runtime behaviour, reducing unnecessary network work, cleaning events, and verifying features across devices." },
-  { title: "Team Collaboration", percentage: 93, description: "Communicating scope, documenting systems, using version-control habits, preparing configurable handoffs, and supporting continued development after delivery." },
+/** @type {{title:string, description:string}[]} */
+export const capabilities = [
+  { title: "Programming fundamentals", description: "Writing clear Luau, structuring control flow, selecting suitable data structures, solving defects, and turning requirements into dependable game features." },
+  { title: "Software architecture", description: "Organizing larger projects into reusable modules and services with explicit responsibilities, predictable state, and code that another developer can extend." },
+  { title: "Gameplay development", description: "Building player mechanics, rounds, interactions, combat rules, cooldowns, NPC behaviour, and responsive feedback across client and server." },
+  { title: "Backend development", description: "Creating server-authoritative logic, validating requests, managing permissions and sessions, and keeping important game rules secure from the client." },
+  { title: "Data and persistence", description: "Designing DataStore profiles, autosave, migrations, recovery paths, cross-server state, and reliable progression that survives disconnects and failures." },
+  { title: "Interface development", description: "Developing responsive Roblox interfaces, menus, onboarding, shops, voting flows, camera states, and feedback that clearly communicates game state." },
+  { title: "Testing and optimization", description: "Reproducing edge cases, profiling runtime behaviour, reducing unnecessary network work, cleaning events, and verifying features across devices." },
+  { title: "Collaboration and handoff", description: "Communicating scope, documenting systems, using version-control habits, preparing configurable handoffs, and supporting continued development after delivery." },
 ];
 
 export const process = [

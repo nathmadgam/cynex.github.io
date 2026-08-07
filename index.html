@@ -3,312 +3,395 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080808">
-  <meta name="description" content="Cynex is a Roblox programmer and systems developer building gameplay, backend, data, interface, moderation, and production systems.">
-  <meta property="og:title" content="Cynex | Roblox Scripter Portfolio">
-  <meta property="og:description" content="Selected Roblox programming work, live experiences, technical capabilities, and client feedback.">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#faf9f7">
+  <title>Cynex — Roblox Programmer &amp; Systems Developer</title>
+  <meta name="description" content="Nathaniel Madrid (Cynex) is a Roblox programmer and systems developer building gameplay, backend, persistent data, interface, and moderation systems in Luau.">
+  <link rel="canonical" href="https://nathmadgam.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="images/avatar.webp">
-  <title>Cynex | Roblox Scripter Portfolio</title>
+  <meta property="og:url" content="https://nathmadgam.github.io/">
+  <meta property="og:site_name" content="Cynex">
+  <meta property="og:title" content="Cynex — Roblox Programmer &amp; Systems Developer">
+  <meta property="og:description" content="Selected Roblox systems, published experiences, technical capabilities, and client feedback.">
+  <meta property="og:image" content="https://nathmadgam.github.io/images/avatar.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@cynexcodes">
+  <meta name="twitter:title" content="Cynex — Roblox Programmer &amp; Systems Developer">
+  <meta name="twitter:description" content="Selected Roblox systems, published experiences, technical capabilities, and client feedback.">
+  <meta name="twitter:image" content="https://nathmadgam.github.io/images/avatar.webp">
+
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="icon" href="assets/fallbacks/cynex-mark.svg" type="image/svg+xml">
-  <link rel="preload" href="images/avatar.webp" as="image" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
-  <script src="assets/js/runtime-config.js" defer></script>
-  <script src="assets/js/site.bundle.js" defer></script>
-  <script src="assets/js/polish.js" defer></script>
+  <link rel="preload" href="images/avatar.webp" as="image" type="image/webp">
+  <script src="assets/js/app.js" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="page-noise" aria-hidden="true"></div>
-  <div class="scan-line" aria-hidden="true"></div>
-  <div class="pointer-halo" aria-hidden="true"></div>
-  <canvas class="ambient-canvas" data-ambient-canvas aria-hidden="true"></canvas>
+
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Interface icons: Lucide (ISC). https://lucide.dev -->
+      <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      </symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
+      </symbol>
+      <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+      </symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </symbol>
+      <symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>
+      </symbol>
+      <symbol id="i-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/>
+      </symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"/>
+      </symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m9 18 6-6-6-6"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5 19.5 12 7 19.5Z"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
+      <!-- Brand icons: Simple Icons (CC0). https://simpleicons.org -->
+      <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></symbol>
+      <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+      <symbol id="i-x-social" viewBox="0 0 24 24"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></symbol>
+      <symbol id="i-proton" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.351s-1.096-.108-1.955-.705c-.86-.596-6.58-4.688-6.58-4.688v8.098S3.513 24 4.55 24h14.9c1.036 0 1.085-.942 1.085-.942v-8.1s-5.723 4.092-6.58 4.69c-.86.595-1.955.704-1.955.704zm0-20.35S4.925-.23 3.465 7.623v5.35s.06.572 1.67 1.735c1.607 1.162 5.773 4.436 6.867 4.436 1.088 0 5.254-3.273 6.865-4.437 1.607-1.164 1.668-1.737 1.668-1.737V7.62C19.075-.229 12 .003 12 .003zm4.846 10.536h-9.69V7.623C8.14 3.723 12 3.67 12 3.67s3.863.054 4.846 3.954z"/></symbol>
+    </defs>
+  </svg>
 
   <header class="site-header" data-header>
-    <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
-    <a class="brand" href="#top" aria-label="Cynex home">
-      <span class="brand-mark" aria-hidden="true">CS</span>
-      <span class="brand-word">CYNEX</span>
-    </a>
-    <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="#work">Work</a>
-      <a href="#skills">Skills</a>
-      <a href="#process">Process</a>
-      <a href="#network">Network</a>
-      <a href="#agreement">Agreement</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
-      <span class="sr-only">Open navigation</span>
-      <span></span><span></span>
-    </button>
+    <div class="site-header-inner shell">
+      <a class="brand" href="#top">Cynex<span class="brand-dot" aria-hidden="true">.</span></a>
+
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#experiences">Experiences</a></li>
+          <li><a href="#capabilities">Capabilities</a></li>
+          <li><a href="#agreement">Agreement</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <a class="header-cta" href="#contact">Start a project</a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu" data-menu-toggle>
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+      </button>
+    </div>
   </header>
 
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" data-mobile-nav aria-hidden="true" inert>
-    <a href="#work">01 / Work</a>
-    <a href="#skills">02 / Skills</a>
-    <a href="#process">03 / Process</a>
-    <a href="#network">04 / Network</a>
-    <a href="#agreement">05 / Agreement</a>
-    <a href="#contact">06 / Contact</a>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" data-mobile-nav hidden>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#experiences">Experiences</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#network">Network</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+      <li><a href="#agreement">Agreement</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
   </nav>
 
   <main id="main">
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-copy">
-        <p class="eyebrow"><span>ROBLOX / LUAU</span><span>PROGRAMMER / SYSTEMS DEVELOPER</span></p>
-        <h1 id="hero-title">
-          <span class="hero-line hero-line-outline">BUILDING</span>
-          <span class="hero-line">SYSTEMS</span>
-          <span class="hero-line hero-line-shift">THAT HOLD.</span>
-        </h1>
-        <p class="hero-intro">I develop Roblox gameplay, backend services, persistent data, interfaces, moderation tools, and production systems that are clear enough to maintain after launch.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#work"><span>Explore selected work</span><span aria-hidden="true">↘</span></a>
-          <a class="button button-ghost" href="#contact"><span>Start a conversation</span><span aria-hidden="true">→</span></a>
-          <a class="button button-download" href="downloads/Contract-Agreement-Form.pdf" target="_blank" rel="noopener noreferrer"><span>View client agreement</span><span aria-hidden="true">↗</span></a>
-        </div>
-      </div>
-
-      <div class="hero-visual" data-tilt-soft>
-        <div class="portrait-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
-        <figure class="hero-portrait">
-          <img src="images/avatar.webp" alt="Portrait of Cynex" width="900" height="900" decoding="async" fetchpriority="high">
-          <div class="portrait-overlay" aria-hidden="true"></div>
-          <figcaption><span>CYNEX / ROBLOX PROGRAMMER</span><span>PH · UTC+8</span></figcaption>
-          <span class="portrait-stamp" aria-hidden="true">CS<br>08+</span>
-        </figure>
-
-        <aside class="hero-console" aria-label="Developer profile summary">
-          <div class="console-head"><span>PROFILE.SYS</span><span class="status-dot">AVAILABLE</span></div>
-          <dl class="console-data">
-            <div><dt>Focus</dt><dd>Gameplay and backend systems</dd></div>
+    <section class="hero" id="top">
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Roblox · Luau · Systems development</p>
+          <h1>Roblox gameplay and backend systems, built to be maintained.</h1>
+          <p class="lede">I develop gameplay, backend services, persistent data, interfaces, and moderation tooling in Luau — structured so a team can extend the work after launch.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#work">View selected work<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+            <a class="btn btn-secondary" href="#contact">Get in touch</a>
+          </div>
+          <dl class="hero-meta">
             <div><dt>Experience</dt><dd>8+ years in Roblox Studio</dd></div>
-            <div><dt>Location</dt><dd>Philippines · UTC+8</dd></div>
-            <div><dt>Delivery</dt><dd>Remote collaboration</dd></div>
-            <div><dt>Local time</dt><dd data-live-clock>--:--:-- PHT</dd></div>
+            <div><dt>Based in</dt><dd>Philippines · UTC+8</dd></div>
+            <div><dt>Status</dt><dd><span class="availability">Available for selected projects</span></dd></div>
           </dl>
-          <div class="console-signal" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <figure class="hero-portrait">
+          <img src="images/avatar.webp" alt="Portrait of Nathaniel Madrid" width="1100" height="1100" fetchpriority="high" decoding="async">
+          <figcaption>Nathaniel Madrid — programmer, working as Cynex</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>01</span>About</p>
+          <h2 id="about-title" class="section-title">Systems that stay clear, stable, and readable.</h2>
+        </div>
+        <div class="about-grid">
+          <div class="prose reveal">
+            <p>I am a Roblox programmer and systems developer studying computer science with a game-development focus. My work covers gameplay systems, DataStore architecture, responsive UI, moderation tools, NPC behaviour, economies, and internal development tooling.</p>
+            <p>I organise projects around reusable Luau modules, server-side validation, predictable state, and explicit configuration, so the result stays practical for a team to extend.</p>
           </div>
-        </aside>
-      </div>
-
-      <div class="hero-index" aria-hidden="true">PORTFOLIO / 2026</div>
-    </section>
-
-    <aside class="live-rail" aria-label="Live portfolio status">
-      <div class="live-rail-status"><span class="live-blink" aria-hidden="true"></span><span>Currently accepting Roblox development inquiries</span></div>
-      <div class="live-metrics">
-        <div class="live-metric"><strong data-live-count="8">8</strong><span>years building</span></div>
-        <div class="live-metric"><strong data-live-count="6">6</strong><span>system demos</span></div>
-        <div class="live-metric"><strong data-live-count="3">3</strong><span>live experiences</span></div>
-      </div>
-      <div class="work-ticker" aria-label="Development specialties">
-        <div class="work-ticker-track">
-          <div class="work-ticker-group"><span>GAMEPLAY PROGRAMMING</span><i>•</i><span>BACKEND LOGIC</span><i>•</i><span>DATA SYSTEMS</span><i>•</i><span>UI DEVELOPMENT</span><i>•</i><span>TESTING</span><i>•</i><span>ROBLOX LUAU</span><i>•</i></div>
-          <div class="work-ticker-group" aria-hidden="true"><span>GAMEPLAY PROGRAMMING</span><i>•</i><span>BACKEND LOGIC</span><i>•</i><span>DATA SYSTEMS</span><i>•</i><span>UI DEVELOPMENT</span><i>•</i><span>TESTING</span><i>•</i><span>ROBLOX LUAU</span><i>•</i></div>
-        </div>
-      </div>
-    </aside>
-
-    <section class="section about" id="about" aria-labelledby="about-title">
-      <div class="section-kicker"><span>00</span><span>ABOUT THE WORK</span></div>
-      <div class="about-layout">
-        <div class="about-title-wrap reveal"><h2 id="about-title">Roblox systems built to stay clear, stable, and maintainable.</h2></div>
-        <div class="about-copy reveal">
-          <p>I am Cynex, a Roblox programmer and systems developer studying computer science with a game-development focus. My work includes gameplay systems, DataStore architecture, responsive UI, moderation tools, NPC behaviour, economies, and internal development tooling.</p>
-          <p>I organize projects around reusable Luau modules, server-side validation, predictable state, and clear configuration so the work remains practical for a team to extend.</p>
-        </div>
-        <div class="about-stats reveal" aria-label="Portfolio facts">
-          <div><strong data-count="16">16</strong><span>archived system demos</span></div>
-          <div><strong data-count="9">9</strong><span>archived client reviews</span></div>
-          <div><strong data-count="3">3</strong><span>published Roblox experiences</span></div>
+          <dl class="facts reveal">
+            <div><dt>Archived system demos</dt><dd>16</dd></div>
+            <div><dt>Archived client reviews</dt><dd>9</dd></div>
+            <div><dt>Published experiences</dt><dd>3</dd></div>
+          </dl>
         </div>
       </div>
     </section>
 
-    <section class="section work" id="work" aria-labelledby="work-title">
-      <div class="section-heading reveal">
-        <div><div class="section-kicker"><span>01</span><span>SELECTED SYSTEMS</span></div><h2 id="work-title">Selected Roblox systems in motion.</h2></div>
-        <p>Six compact demonstrations covering gameplay, persistent data, NPC behaviour, interfaces, economy systems, and reusable frameworks.</p>
-      </div>
-      <div class="project-grid" data-project-grid aria-live="polite"></div>
-    </section>
-
-    <section class="section live-work" id="games" aria-labelledby="games-title">
-      <div class="section-heading reveal">
-        <div><div class="section-kicker"><span>02</span><span>LIVE EXPERIENCES</span></div><h2 id="games-title">Published Roblox experiences.</h2></div>
-        <p>Each card shows the experience title, official creator, my role as Programmer, and the game description supplied by Roblox when available.</p>
-      </div>
-      <div class="game-grid" data-game-grid aria-live="polite"></div>
-    </section>
-
-    <section class="section skills" id="skills" aria-labelledby="skills-title">
-      <div class="section-kicker"><span>03</span><span>PROFESSIONAL RANGE</span></div>
-      <div class="skills-layout">
-        <div class="skills-lead reveal">
-          <h2 id="skills-title">A clear view of my programming proficiency.</h2>
-          <p>These percentages describe my current working confidence across the general areas used in professional software and Roblox game development. Each item explains what that area means in practical project work.</p>
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>02</span>Selected work</p>
+          <h2 id="work-title" class="section-title">Six systems, in motion.</h2>
+          <p class="section-lede">Compact demonstrations covering gameplay, persistent data, NPC behaviour, interfaces, economy systems, and reusable frameworks. Select a project to play its recording.</p>
         </div>
-        <div class="skill-matrix reveal" data-skill-grid></div>
+        <div class="project-list" data-project-list></div>
       </div>
     </section>
 
-    <section class="section process" id="process" aria-labelledby="process-title">
-      <div class="section-heading reveal">
-        <div><div class="section-kicker"><span>04</span><span>DEVELOPMENT PROCESS</span></div><h2 id="process-title">A practical workflow for Roblox development.</h2></div>
-      </div>
-      <ol class="process-grid" data-process-grid></ol>
-    </section>
-
-    <section class="section network" id="network" aria-labelledby="network-title">
-      <div class="section-heading reveal">
-        <div><div class="section-kicker"><span>05</span><span>STUDIOS AND SERVERS</span></div><h2 id="network-title">Roblox groups and developer communities.</h2></div>
-        <p>Studios, groups, and Discord communities connected to my Roblox development work.</p>
-      </div>
-      <div class="network-columns">
-        <div><h3 class="column-label">Roblox groups</h3><div class="network-grid" data-roblox-groups aria-live="polite"></div></div>
-        <div><h3 class="column-label">Discord servers</h3><div class="network-grid" data-discord-servers aria-live="polite"></div></div>
-      </div>
-    </section>
-
-    <section class="section reviews" id="reviews" aria-labelledby="reviews-title">
-      <div class="reviews-head reveal">
-        <div><div class="section-kicker"><span>06</span><span>CLIENT FEEDBACK</span></div><h2 id="reviews-title">What clients said after delivery.</h2></div>
-        <p>Nine five-star Fiverr reviews from completed scripting orders, including repeat clients, delivery ranges, and project timelines.</p>
-      </div>
-      <div class="review-list" data-review-list></div>
-    </section>
-
-    <section class="section agreement" id="agreement" aria-labelledby="agreement-title">
-      <div class="agreement-heading reveal">
-        <div>
-          <div class="section-kicker"><span>07</span><span>PROJECT AGREEMENT FORM</span></div>
-          <p class="agreement-status"><span class="live-blink" aria-hidden="true"></span> READ ONLINE OR DOWNLOAD</p>
-          <h2 id="agreement-title">Review the contract agreement form before starting a project.</h2>
+    <section class="section" id="experiences" aria-labelledby="experiences-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>03</span>Live experiences</p>
+          <h2 id="experiences-title" class="section-title">Published Roblox games.</h2>
+          <p class="section-lede">Experiences currently live on Roblox where I worked as programmer.</p>
         </div>
-        <p>This five-page form records project scope, payment milestones, revisions, ownership, confidentiality, cancellation terms, and signatures. Read every page in the viewer, then download the fillable PDF when you are ready to inquire.</p>
+        <div class="experience-list" data-experience-list></div>
       </div>
-      <div class="contract-viewer reveal" data-contract-viewer style="--reveal-delay:120ms">
-        <div class="contract-toolbar">
-          <div class="contract-document-title"><span class="contract-file-icon" aria-hidden="true">PDF</span><span><strong>Contract Agreement Form</strong><small>Contract agreement form · 5 pages</small></span></div>
-          <div class="contract-page-count" aria-live="polite">Page <strong data-contract-current>1</strong> of 5</div>
-          <div class="contract-tools" aria-label="Agreement viewer controls">
-            <button type="button" data-contract-zoom-out aria-label="Zoom out">−</button>
-            <button type="button" data-contract-zoom-in aria-label="Zoom in">+</button>
-            <a href="downloads/Contract-Agreement-Form.pdf" target="_blank" rel="noopener noreferrer">Open PDF</a>
-            <a class="contract-download" href="downloads/Contract-Agreement-Form.pdf" download>Download form</a>
+    </section>
+
+    <section class="section" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>04</span>Capabilities</p>
+          <h2 id="capabilities-title" class="section-title">Where I work across a project.</h2>
+          <p class="section-lede">The areas I take responsibility for in professional software and Roblox game development.</p>
+        </div>
+        <dl class="capability-list" data-capability-list></dl>
+      </div>
+    </section>
+
+    <section class="section" id="process" aria-labelledby="process-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>05</span>Process</p>
+          <h2 id="process-title" class="section-title">A practical workflow.</h2>
+        </div>
+        <ol class="process-list" data-process-list></ol>
+      </div>
+    </section>
+
+    <section class="section" id="network" aria-labelledby="network-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>06</span>Network</p>
+          <h2 id="network-title" class="section-title">Groups and developer communities.</h2>
+        </div>
+        <div class="network-grid">
+          <div>
+            <h3 class="column-label">Roblox groups</h3>
+            <ul class="network-list" data-roblox-groups></ul>
+          </div>
+          <div>
+            <h3 class="column-label">Discord servers</h3>
+            <ul class="network-list" data-discord-servers></ul>
           </div>
         </div>
-        <div class="contract-workspace">
-          <nav class="contract-thumbnails" aria-label="Agreement pages">
-            <button type="button" class="is-active" data-contract-jump="1" aria-label="Go to agreement page 1"><img src="assets/contract-pages/page-1.webp" alt="" width="127" height="195"><span>01</span></button>
-            <button type="button" data-contract-jump="2" aria-label="Go to agreement page 2"><img src="assets/contract-pages/page-2.webp" alt="" width="127" height="195" loading="lazy"><span>02</span></button>
-            <button type="button" data-contract-jump="3" aria-label="Go to agreement page 3"><img src="assets/contract-pages/page-3.webp" alt="" width="127" height="195" loading="lazy"><span>03</span></button>
-            <button type="button" data-contract-jump="4" aria-label="Go to agreement page 4"><img src="assets/contract-pages/page-4.webp" alt="" width="127" height="195" loading="lazy"><span>04</span></button>
-            <button type="button" data-contract-jump="5" aria-label="Go to agreement page 5"><img src="assets/contract-pages/page-5.webp" alt="" width="127" height="195" loading="lazy"><span>05</span></button>
-          </nav>
-          <div class="contract-viewport" data-contract-viewport tabindex="0" aria-label="Scrollable preview of the five-page Contract Agreement Form">
-            <div class="contract-pages">
-              <figure class="contract-page" data-contract-page="1"><img src="assets/contract-pages/page-1.webp" alt="Contract Agreement Form, page 1 of 5: party information, project details, and services" width="1275" height="1950" decoding="async"><figcaption>Page 1 of 5</figcaption></figure>
-              <figure class="contract-page" data-contract-page="2"><img src="assets/contract-pages/page-2.webp" alt="Contract Agreement Form, page 2 of 5: payment, milestones, review, revisions, and ownership" width="1275" height="1950" loading="lazy" decoding="async"><figcaption>Page 2 of 5</figcaption></figure>
-              <figure class="contract-page" data-contract-page="3"><img src="assets/contract-pages/page-3.webp" alt="Contract Agreement Form, page 3 of 5: permitted use, Roblox platform rules, confidentiality, and cancellation" width="1275" height="1950" loading="lazy" decoding="async"><figcaption>Page 3 of 5</figcaption></figure>
-              <figure class="contract-page" data-contract-page="4"><img src="assets/contract-pages/page-4.webp" alt="Contract Agreement Form, page 4 of 5: warranties, responsibility, dispute resolution, and electronic agreement" width="1275" height="1950" loading="lazy" decoding="async"><figcaption>Page 4 of 5</figcaption></figure>
-              <figure class="contract-page" data-contract-page="5"><img src="assets/contract-pages/page-5.webp" alt="Contract Agreement Form, page 5 of 5: general terms and signatures" width="1275" height="1950" loading="lazy" decoding="async"><figcaption>Page 5 of 5</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section" id="feedback" aria-labelledby="feedback-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>07</span>Feedback</p>
+          <h2 id="feedback-title" class="section-title">What clients said after delivery.</h2>
+          <p class="section-lede">Nine five-star reviews archived from completed Fiverr scripting orders, including repeat clients.</p>
+        </div>
+        <ul class="review-list" data-review-list></ul>
+      </div>
+    </section>
+
+    <section class="section" id="agreement" aria-labelledby="agreement-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>08</span>Agreement</p>
+          <h2 id="agreement-title" class="section-title">Review the contract before we start.</h2>
+          <p class="section-lede">A five-page form recording project scope, payment milestones, revisions, ownership, confidentiality, cancellation terms, and signatures. Read it here, or download the fillable PDF.</p>
+        </div>
+
+        <div class="contract reveal" data-contract>
+          <div class="contract-bar">
+            <p class="contract-title">
+              <svg class="icon" aria-hidden="true"><use href="#i-file-text"></use></svg>
+              <span>Contract Agreement Form<small>PDF · 5 pages</small></span>
+            </p>
+            <div class="contract-controls">
+              <div class="contract-pager">
+                <button type="button" data-contract-prev aria-label="Previous page">
+                  <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg>
+                </button>
+                <span aria-live="polite">Page <strong data-contract-current>1</strong> / 5</span>
+                <button type="button" data-contract-next aria-label="Next page">
+                  <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+                </button>
+              </div>
+              <a class="btn btn-secondary btn-sm" href="downloads/Contract-Agreement-Form.pdf" download>
+                <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>Download
+              </a>
             </div>
           </div>
+          <div class="contract-viewport" data-contract-viewport tabindex="0" role="group" aria-label="Contract Agreement Form, five pages">
+            <figure class="contract-page" data-contract-page="1"><img src="assets/contract-pages/page-1.webp" alt="Page 1: party information, project details, and services" width="1275" height="1950" decoding="async"></figure>
+            <figure class="contract-page" data-contract-page="2"><img src="assets/contract-pages/page-2.webp" alt="Page 2: payment, milestones, review, revisions, and ownership" width="1275" height="1950" loading="lazy" decoding="async"></figure>
+            <figure class="contract-page" data-contract-page="3"><img src="assets/contract-pages/page-3.webp" alt="Page 3: permitted use, Roblox platform rules, confidentiality, and cancellation" width="1275" height="1950" loading="lazy" decoding="async"></figure>
+            <figure class="contract-page" data-contract-page="4"><img src="assets/contract-pages/page-4.webp" alt="Page 4: warranties, responsibility, dispute resolution, and electronic agreement" width="1275" height="1950" loading="lazy" decoding="async"></figure>
+            <figure class="contract-page" data-contract-page="5"><img src="assets/contract-pages/page-5.webp" alt="Page 5: general terms and signatures" width="1275" height="1950" loading="lazy" decoding="async"></figure>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="contact" id="contact" aria-labelledby="contact-title">
-      <div class="contact-grid" aria-hidden="true"></div>
-      <div class="contact-copy reveal">
-        <div class="section-kicker"><span>08</span><span>CONTACT</span></div>
-        <h2 id="contact-title">Need a Roblox system built, improved, or repaired?</h2>
-        <p>Send the feature brief, current project state, expected behavior, and deadline. I can review the scope and discuss the cleanest implementation path.</p>
-      </div>
-      <div class="contact-interactive reveal">
-        <form class="inquiry-form" data-inquiry-form data-tilt-soft novalidate>
-          <div class="inquiry-form-head">
-            <span>PROJECT INQUIRY</span>
-            <strong>Tell me what needs to be built.</strong>
-          </div>
-          <div class="inquiry-fields">
-            <label><span>Your name</span><input type="text" name="name" autocomplete="name" required placeholder="Name or studio"></label>
-            <label><span>Your email</span><input type="email" name="email" autocomplete="email" required placeholder="you@example.com"></label>
-            <label><span>Project type</span><select name="projectType" required><option value="">Select one</option><option>Gameplay system</option><option>Backend or data system</option><option>User interface</option><option>Bug fixing or optimization</option><option>Full Roblox project</option><option>Other</option></select></label>
-            <label><span>Target timeline</span><input type="text" name="timeline" placeholder="Example: 2–4 weeks"></label>
-            <label class="inquiry-wide"><span>Project brief</span><textarea name="brief" required rows="5" placeholder="Describe the current project, the feature, expected behavior, and any deadline."></textarea></label>
-          </div>
-          <button class="inquiry-submit" type="submit" data-inquiry-submit><span>Prepare project email</span><span aria-hidden="true">↗</span></button>
-          <p class="inquiry-note">This static form opens a prepared email to <strong>nathanielmadridgaminde@proton.me</strong>. No information is stored on the website.</p>
-          <div class="inquiry-success" data-inquiry-success aria-live="polite" hidden><span aria-hidden="true">✓</span><strong>Project email prepared.</strong><small>Your email app should open in a moment.</small></div>
-        </form>
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="section-label"><span>09</span>Contact</p>
+          <h2 id="contact-title" class="section-title">Need a Roblox system built, improved, or repaired?</h2>
+          <p class="section-lede">Send the feature brief, the current state of the project, the expected behaviour, and the deadline. I will review the scope and outline the cleanest implementation path.</p>
+        </div>
 
-        <div class="contact-actions">
-          <a class="contact-card contact-card-main" href="mailto:nathanielmadridgaminde@proton.me" data-magnetic>
-            <span class="contact-icon contact-icon-proton" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20.351s-1.096-.108-1.955-.705c-.86-.596-6.58-4.688-6.58-4.688v8.098S3.513 24 4.55 24h14.9c1.036 0 1.085-.942 1.085-.942v-8.1s-5.723 4.092-6.58 4.69c-.86.595-1.955.704-1.955.704zm0-20.35S4.925-.23 3.465 7.623v5.35s.06.572 1.67 1.735c1.607 1.162 5.773 4.436 6.867 4.436 1.088 0 5.254-3.273 6.865-4.437 1.607-1.164 1.668-1.737 1.668-1.737V7.62C19.075-.229 12 .003 12 .003zm4.846 10.536h-9.69V7.623C8.14 3.723 12 3.67 12 3.67s3.863.054 4.846 3.954z"/></svg></span>
-            <span class="contact-meta"><small>Proton Mail</small><strong>nathanielmadridgaminde@proton.me</strong><em>Project briefs and contracts</em></span>
-            <span class="contact-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-          </a>
-          <a class="contact-card" href="https://discord.gg/sAQtQyyS" target="_blank" rel="noopener noreferrer" data-magnetic>
-            <span class="contact-icon contact-icon-discord" aria-hidden="true"><svg viewBox="0 0 640 512"><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91A483.689 483.689 0 0 0 116.085 69.137a1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375A487.666 487.666 0 0 0 176.02 479.918a1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126c3.082-2.309 6.166-4.711 9.109-7.137a1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233c2.944 2.426 6.027 4.851 9.132 7.16a1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352C623.729 277.594 590.933 167.465 524.531 69.836ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239S193.056 219.1 222.491 219.1c29.665 0 53.306 26.82 52.843 59.239 0 32.652-23.41 59.239-52.843 59.239Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.652-23.177 59.239-52.844 59.239Z"/></svg></span>
-            <span class="contact-meta"><small>Discord</small><strong>Join the Cynex server</strong><em>Direct technical discussion</em></span>
-            <span class="contact-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-          </a>
-          <a class="contact-card" href="https://www.linkedin.com/in/nathaniel-madrid" target="_blank" rel="noopener noreferrer" data-magnetic>
-            <span class="contact-icon contact-icon-linkedin" aria-hidden="true"><svg viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3C448 46.5 433.6 32 416 32ZM135.4 416H69V202.2h66.5V416Zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5Zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416Z"/></svg></span>
-            <span class="contact-meta"><small>LinkedIn</small><strong>Nathaniel Madrid</strong><em>Professional profile</em></span>
-            <span class="contact-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-          </a>
-          <a class="contact-card" href="https://x.com/cynexcodes" target="_blank" rel="noopener noreferrer" data-magnetic>
-            <span class="contact-icon contact-icon-x" aria-hidden="true"><svg viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48ZM364.4 421.8h39.1L151.1 88h-42L364.4 421.8Z"/></svg></span>
-            <span class="contact-meta"><small>X</small><strong>@cynexcodes</strong><em>Builds and updates</em></span>
-            <span class="contact-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-          </a>
+        <div class="contact-grid">
+          <form class="inquiry" data-inquiry-form novalidate>
+            <div class="field">
+              <label for="f-name">Name or studio</label>
+              <input id="f-name" type="text" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" type="email" name="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="f-type">Project type</label>
+              <select id="f-type" name="projectType" required>
+                <option value="">Select one</option>
+                <option>Gameplay system</option>
+                <option>Backend or data system</option>
+                <option>User interface</option>
+                <option>Bug fixing or optimization</option>
+                <option>Full Roblox project</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-timeline">Target timeline <span class="optional">(optional)</span></label>
+              <input id="f-timeline" type="text" name="timeline" placeholder="e.g. 2–4 weeks">
+            </div>
+            <div class="field field-wide">
+              <label for="f-brief">Project brief</label>
+              <textarea id="f-brief" name="brief" rows="5" required placeholder="Current project state, the feature you need, expected behaviour, and any deadline."></textarea>
+            </div>
+            <div class="inquiry-foot">
+              <button class="btn btn-primary" type="submit">Prepare email<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+              <p class="form-note">Opens a pre-filled message to <strong>nathanielmadridgaminde@proton.me</strong>. Nothing is stored on this site.</p>
+            </div>
+            <p class="form-status" data-inquiry-status role="status" hidden>
+              <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span></span>
+            </p>
+          </form>
+
+          <div class="channels">
+            <h3 class="column-label">Direct channels</h3>
+            <ul>
+              <li>
+                <a href="mailto:nathanielmadridgaminde@proton.me">
+                  <svg class="icon channel-icon" aria-hidden="true"><use href="#i-proton"></use></svg>
+                  <span class="channel-copy"><strong>nathanielmadridgaminde@proton.me</strong><small>Project briefs and contracts</small></span>
+                  <svg class="icon channel-go" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://discord.gg/sAQtQyyS" target="_blank" rel="noopener noreferrer">
+                  <svg class="icon channel-icon" aria-hidden="true"><use href="#i-discord"></use></svg>
+                  <span class="channel-copy"><strong>Cynex Services on Discord</strong><small>Direct technical discussion</small></span>
+                  <svg class="icon channel-go" aria-hidden="true"><use href="#i-external"></use></svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/nathaniel-madrid" target="_blank" rel="noopener noreferrer">
+                  <svg class="icon channel-icon" aria-hidden="true"><use href="#i-linkedin"></use></svg>
+                  <span class="channel-copy"><strong>Nathaniel Madrid</strong><small>Professional profile</small></span>
+                  <svg class="icon channel-go" aria-hidden="true"><use href="#i-external"></use></svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://x.com/cynexcodes" target="_blank" rel="noopener noreferrer">
+                  <svg class="icon channel-icon" aria-hidden="true"><use href="#i-x-social"></use></svg>
+                  <span class="channel-copy"><strong>@cynexcodes</strong><small>Builds and updates</small></span>
+                  <svg class="icon channel-go" aria-hidden="true"><use href="#i-external"></use></svg>
+                </a>
+              </li>
+            </ul>
+            <p class="channels-note">
+              <svg class="icon" aria-hidden="true"><use href="#i-map-pin"></use></svg>
+              Philippines · UTC+8 — remote collaboration
+            </p>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer-inner" data-footer-depth>
-      <a class="footer-brand" href="#top" aria-label="Cynex Services, back to top">
-        <span class="footer-brand-mark" aria-hidden="true">CS</span>
-        <span class="footer-brand-copy"><strong>Cynex Services</strong><small>Roblox programmer and systems developer</small></span>
-      </a>
-      <div class="footer-status" aria-label="Availability">
-        <span class="footer-status-dot" aria-hidden="true"></span>
-        <span>Available for selected projects</span>
-        <small>Philippines · UTC+8</small>
-      </div>
-      <a class="footer-top" href="#top"><span>Back to top</span><span aria-hidden="true">↑</span></a>
+    <div class="shell site-footer-inner">
+      <p class="footer-brand"><strong>Cynex</strong><span>Roblox programmer and systems developer</span></p>
+      <ul class="footer-links">
+        <li><a href="mailto:nathanielmadridgaminde@proton.me" aria-label="Email">
+          <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg></a></li>
+        <li><a href="https://discord.gg/sAQtQyyS" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+          <svg class="icon" aria-hidden="true"><use href="#i-discord"></use></svg></a></li>
+        <li><a href="https://www.linkedin.com/in/nathaniel-madrid" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a></li>
+        <li><a href="https://x.com/cynexcodes" target="_blank" rel="noopener noreferrer" aria-label="X">
+          <svg class="icon" aria-hidden="true"><use href="#i-x-social"></use></svg></a></li>
+      </ul>
+      <a class="footer-top" href="#top">Back to top<svg class="icon" aria-hidden="true"><use href="#i-arrow-up"></use></svg></a>
     </div>
   </footer>
 
-  <dialog class="media-dialog" data-media-dialog aria-labelledby="media-dialog-title">
-    <div class="media-dialog-head">
-      <div><span class="dialog-kicker">PROJECT DEMO</span><h2 id="media-dialog-title" data-dialog-title></h2></div>
-      <button type="button" class="dialog-close" data-dialog-close aria-label="Close video">Close ×</button>
+  <dialog class="player" data-player aria-labelledby="player-title">
+    <div class="player-head">
+      <h2 id="player-title" data-player-title>Project demo</h2>
+      <button type="button" class="player-close" data-player-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+      </button>
     </div>
-    <div class="dialog-audio-status" data-dialog-status><span aria-hidden="true"></span>Audio enabled — use the custom controls below.</div>
-    <div class="dialog-video-shell" data-video-player>
-      <div class="dialog-loader" aria-hidden="true"></div>
-      <video data-dialog-video controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback playsinline preload="metadata" tabindex="-1"></video>
-      <div class="video-controls" data-video-controls>
-        <button type="button" class="video-control video-toggle" data-video-toggle aria-label="Play video"><span data-video-play-icon>▶</span></button>
-        <span class="video-time" data-video-time>00:00 / 00:00</span>
-        <input class="video-progress" data-video-progress type="range" min="0" max="1000" value="0" aria-label="Video progress">
-        <button type="button" class="video-control" data-video-mute aria-label="Mute video"><span data-video-volume-icon>🔊</span></button>
-        <input class="video-volume" data-video-volume type="range" min="0" max="1" step="0.05" value="0.9" aria-label="Video volume">
-        <button type="button" class="video-control" data-video-fullscreen aria-label="Enter fullscreen">⛶</button>
-      </div>
-    </div>
+    <video data-player-video controls playsinline preload="metadata" width="1920" height="1080"></video>
   </dialog>
 
-  <noscript><div class="noscript">JavaScript is required to load the project cards. Contact: nathanielmadridgaminde@proton.me</div></noscript>
+  <noscript>
+    <div class="noscript shell">Project, experience, and feedback listings need JavaScript. You can reach me at nathanielmadridgaminde@proton.me.</div>
+  </noscript>
 </body>
 </html>
