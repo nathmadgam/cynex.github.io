@@ -316,6 +316,14 @@ function setupInquiryForm() {
   if (!form) return;
   const status = qs("[data-inquiry-status]", form);
   const statusText = qs("span", status);
+  const statusIcon = qs("use", status);
+
+  const announce = (message, state) => {
+    status.hidden = false;
+    status.dataset.state = state;
+    statusText.textContent = message;
+    statusIcon.setAttribute("href", state === "error" ? "#i-x" : "#i-check");
+  };
 
   form.addEventListener("submit", event => {
     event.preventDefault();
@@ -327,8 +335,7 @@ function setupInquiryForm() {
     if (invalid) {
       invalid.setAttribute("aria-invalid", "true");
       invalid.focus();
-      status.hidden = false;
-      statusText.textContent = "Please complete the highlighted field.";
+      announce("Please complete the highlighted field.", "error");
       return;
     }
 
@@ -345,8 +352,7 @@ function setupInquiryForm() {
       get("brief"),
     ].join("\n");
 
-    status.hidden = false;
-    statusText.textContent = "Email prepared — your mail app should open shortly.";
+    announce("Email prepared — your mail app should open shortly.", "ok");
     location.href =
       `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });

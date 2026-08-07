@@ -1,9 +1,4 @@
-node_modules
-.next
-.env
-.env.local
-app/generated/prisma
-*.log
 .DS_Store
-out
-tsconfig.tsbuildinfo
+Thumbs.db
+*.log
+_site
