@@ -114,10 +114,15 @@ function renderFreelance() {
   if (publicList) {
     publicList.innerHTML = publicWork.map(work => `
       <article class="public-work-item reveal">
-        <div>
-          <p class="freelance-meta">Public previous work</p>
-          <h4>${escapeHtml(work.name)}</h4>
-          <p>${escapeHtml(work.description)}</p>
+        <div class="public-work-identity">
+          <div class="public-work-icon">
+            <img src="${escapeHtml(work.favicon)}" alt="${escapeHtml(work.name)} website favicon" width="48" height="48" loading="lazy" decoding="async">
+          </div>
+          <div>
+            <p class="freelance-meta">Public previous work</p>
+            <h4>${escapeHtml(work.name)}</h4>
+            <p>${escapeHtml(work.description)}</p>
+          </div>
         </div>
         <a class="text-link" href="${escapeHtml(work.url)}" target="_blank" rel="noopener noreferrer"
            aria-label="Visit ${escapeHtml(work.name)} (opens in a new tab)">

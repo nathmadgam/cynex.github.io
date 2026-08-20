@@ -2,7 +2,7 @@
 /** @typedef {{name:string, id:string, idType:'place'|'universe', universeId?:string, creator:string, role:string, url:string, description:string, fallback:string, cachedImage?:string}} RobloxGame */
 /** @typedef {{name:string, groupId:string, role:string, description:string, url:string, fallback:string, cachedImage?:string, cacheName?:string}} RobloxGroup */
 /** @typedef {{name:string, description:string, url:string, cachedImage:string}} FreelanceProject */
-/** @typedef {{name:string, description:string, url:string}} PublicWork */
+/** @typedef {{name:string, description:string, url:string, favicon:string}} PublicWork */
 /** @typedef {{name:string, role:string, description:string, inviteCode:string, url:string, fallback:string, cachedImage?:string, cacheName?:string, guildId?:string, iconHash?:string}} DiscordServer */
 
 /** @type {Project[]} */
@@ -136,11 +136,13 @@ export const publicWork = [
     name: "Event Punks",
     description: "Public project website",
     url: "https://www.event-punks.com/",
+    favicon: "assets/cached-media/event-punks-favicon.png",
   },
   {
     name: "byten21",
     description: "Public studio website",
     url: "https://www.byten21.com/",
+    favicon: "assets/cached-media/byten21-favicon.png",
   },
 ];
 
