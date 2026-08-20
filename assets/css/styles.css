@@ -688,18 +688,21 @@ h1 { font-size: var(--fs-display); }
 .freelance-public { margin-top: clamp(3rem, 6vw, 5rem); }
 .public-work-list {
   display: grid;
-  gap: 0 clamp(1.5rem, 4vw, 4rem);
+  gap: clamp(1.25rem, 3vw, 2rem) clamp(1.5rem, 4vw, 4rem);
 }
 .public-work-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-sm);
-  padding-block: 1.25rem;
-  border-top: 1px solid var(--line);
+  padding-block: 0.5rem;
 }
-.public-work-item:last-child { border-bottom: 1px solid var(--line); }
 .public-work-item .text-link { margin-top: auto; }
+.freelance-public .column-label {
+  padding-bottom: 0;
+  border-bottom: 0;
+  margin-bottom: var(--space-md);
+}
 .public-work-identity {
   display: flex;
   align-items: flex-start;
