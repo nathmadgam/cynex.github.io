@@ -6,6 +6,8 @@
 import {
   projects,
   games,
+  freelanceProjects,
+  publicWork,
   capabilities,
   process,
   robloxGroups,
@@ -84,6 +86,45 @@ function renderExperiences() {
       </div>
     </article>`).join("");
   attachImageFallbacks(list);
+}
+
+function renderFreelance() {
+  const major = qs("[data-freelance-major]");
+  const publicList = qs("[data-public-work]");
+
+  if (major) {
+    major.innerHTML = freelanceProjects.map(project => `
+      <article class="freelance-card reveal">
+        <a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer"
+           aria-label="Open ${escapeHtml(project.name)} community page (opens in a new tab)">
+          <div class="freelance-logo">
+            <img src="${escapeHtml(project.cachedImage)}" alt="Official ${escapeHtml(project.name)} community logo"
+                 width="150" height="150" loading="lazy" decoding="async">
+          </div>
+          <div class="freelance-card-body">
+            <p class="freelance-meta">Freelance collaboration</p>
+            <h3>${escapeHtml(project.name)}</h3>
+            <p>${escapeHtml(project.description)}</p>
+            <span class="text-link">View community${icon("external")}</span>
+          </div>
+        </a>
+      </article>`).join("");
+  }
+
+  if (publicList) {
+    publicList.innerHTML = publicWork.map(work => `
+      <article class="public-work-item reveal">
+        <div>
+          <p class="freelance-meta">Public previous work</p>
+          <h4>${escapeHtml(work.name)}</h4>
+          <p>${escapeHtml(work.description)}</p>
+        </div>
+        <a class="text-link" href="${escapeHtml(work.url)}" target="_blank" rel="noopener noreferrer"
+           aria-label="Visit ${escapeHtml(work.name)} (opens in a new tab)">
+          Visit site${icon("external")}
+        </a>
+      </article>`).join("");
+  }
 }
 
 function renderCapabilities() {
@@ -399,6 +440,7 @@ function setupInquiryForm() {
 
 renderProjects();
 renderExperiences();
+renderFreelance();
 renderCapabilities();
 renderProcess();
 renderNetwork();

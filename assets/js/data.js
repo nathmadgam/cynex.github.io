@@ -1,6 +1,8 @@
 /** @typedef {{title:string, category:string, year:string, description:string, tags:string[], video:string, poster:string}} Project */
 /** @typedef {{name:string, id:string, idType:'place'|'universe', universeId?:string, creator:string, role:string, url:string, description:string, fallback:string, cachedImage?:string}} RobloxGame */
 /** @typedef {{name:string, groupId:string, role:string, description:string, url:string, fallback:string, cachedImage?:string, cacheName?:string}} RobloxGroup */
+/** @typedef {{name:string, description:string, url:string, cachedImage:string}} FreelanceProject */
+/** @typedef {{name:string, description:string, url:string}} PublicWork */
 /** @typedef {{name:string, role:string, description:string, inviteCode:string, url:string, fallback:string, cachedImage?:string, cacheName?:string, guildId?:string, iconHash?:string}} DiscordServer */
 
 /** @type {Project[]} */
@@ -97,6 +99,48 @@ export const games = [
     description: "Climb a soft pink tower built around wallhop movement, precision platforming, and increasingly demanding obstacle sections.",
     cachedImage: "assets/cached-media/soft-pink-wallhop.webp",
     fallback: "assets/fallbacks/soft-pink-wallhop.svg",
+  },
+];
+
+/** @type {FreelanceProject[]} */
+export const freelanceProjects = [
+  {
+    name: "DevWorks",
+    description: "Roblox community",
+    url: "https://www.roblox.com/communities/281384301/D-evWorks#!/about",
+    cachedImage: "assets/cached-media/freelance-devworks.webp",
+  },
+  {
+    name: "Cly Games",
+    description: "Roblox community",
+    url: "https://www.roblox.com/communities/578746552/Cly-Games#!/about",
+    cachedImage: "assets/cached-media/freelance-cly-games.webp",
+  },
+  {
+    name: "Lazy Tower Studio",
+    description: "Roblox community",
+    url: "https://www.roblox.com/communities/493535382/Lazy-Tower-Studio#!/about",
+    cachedImage: "assets/cached-media/freelance-lazy-tower-studio.webp",
+  },
+  {
+    name: "EuphoriaStudios",
+    description: "Roblox community",
+    url: "https://www.roblox.com/communities/4931806/EuphoriaStudios#!/about",
+    cachedImage: "assets/cached-media/freelance-euphoria-studios.webp",
+  },
+];
+
+/** @type {PublicWork[]} */
+export const publicWork = [
+  {
+    name: "Event Punks",
+    description: "Public project website",
+    url: "https://www.event-punks.com/",
+  },
+  {
+    name: "byten21",
+    description: "Public studio website",
+    url: "https://www.byten21.com/",
   },
 ];
 

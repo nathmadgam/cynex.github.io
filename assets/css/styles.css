@@ -617,6 +617,93 @@ h1 { font-size: var(--fs-display); }
   .experience { grid-template-columns: 300px minmax(0, 1fr); align-items: start; }
 }
 
+/* ---------- Freelance collaborations ---------- */
+.freelance-major {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.freelance-card {
+  display: flex;
+  min-width: 0;
+  border-top: 1px solid var(--line);
+}
+.freelance-card > a {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-sm);
+  color: inherit;
+}
+.freelance-logo {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunk);
+  overflow: hidden;
+  transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+.freelance-logo img {
+  width: min(150px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.freelance-card > a:hover .freelance-logo {
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+.freelance-card-body { padding-bottom: 0.25rem; }
+.freelance-meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.freelance-card h3,
+.public-work-item h4 {
+  margin-top: 0.25rem;
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+.freelance-card-body > p:not(.freelance-meta),
+.public-work-item h4 + p {
+  margin-top: 0.375rem;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.freelance-card .text-link { margin-top: 0.75rem; }
+
+@media (min-width: 640px) {
+  .freelance-major { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1040px) {
+  .freelance-major { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.freelance-public { margin-top: clamp(3rem, 6vw, 5rem); }
+.public-work-list {
+  display: grid;
+  gap: 0 clamp(1.5rem, 4vw, 4rem);
+}
+.public-work-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.public-work-item:last-child { border-bottom: 1px solid var(--line); }
+.public-work-item .text-link { margin-top: auto; }
+@media (min-width: 720px) {
+  .public-work-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* ---------- Capabilities ---------- */
 .capability-list {
   display: grid;
